@@ -1,6 +1,9 @@
 import * as z from 'zod';
 import {
   apiErrorSchema,
+  bookingInputSchema,
+  bookingPageSchema,
+  bookingSchema,
   locationInputSchema,
   locationPageSchema,
   locationSchema,
@@ -33,6 +36,9 @@ const COMPONENTS = {
   Member: memberSchema,
   MemberInput: memberInputSchema,
   MemberPage: memberPageSchema,
+  Booking: bookingSchema,
+  BookingInput: bookingInputSchema,
+  BookingPage: bookingPageSchema,
 };
 
 // Zod throws when an id is taken, so a clash shows up at startup.

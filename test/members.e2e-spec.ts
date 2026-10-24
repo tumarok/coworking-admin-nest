@@ -1,4 +1,3 @@
-import type { Response } from 'supertest';
 import { Clock } from '../src/common/clock/clock.js';
 import { sequenceOf } from '../src/common/ids/ids.js';
 import { memberPageSchema, memberSchema } from '../src/contract/index.js';
@@ -9,6 +8,7 @@ import { SEED_NOW } from './support/constants.js';
 import { expectContract } from './support/expect-contract.js';
 import type { FixedClock } from './support/fixed-clock.js';
 import { loadSeedGolden } from './support/golden.js';
+import { queuedBehind } from './support/queued-behind.js';
 import { seededApp, type SeededApp } from './support/seeded-app.js';
 import { bearer, signIn } from './support/sign-in.js';
 
@@ -399,7 +399,7 @@ describe('members (write)', () => {
       createdAt: SEED_NOW,
     };
   };
-  /** A booking straight in the table in a room of its own: bookings have no endpoint yet. */
+  /** A booking written straight into the table, in a room of its own. */
   const addBooking = async (
     memberId: string,
     status: BookingStatus,
@@ -424,33 +424,6 @@ describe('members (write)', () => {
     await tx.member.create({
       data: { id, seq, ...newMember, email: address, joinedAt: SEED_NOW },
     });
-  };
-
-  /** Whether a backend of this database is blocked on a lock. */
-  const lockWaiting = async () => {
-    const rows = await prisma.client.$queryRaw<{ waiting: number }[]>`
-      SELECT count(*)::int AS waiting FROM pg_stat_activity
-      WHERE datname = current_database() AND wait_event_type = 'Lock'`;
-    return (rows.at(0)?.waiting ?? 0) > 0;
-  };
-
-  /** Sends `request` while `hold` has uncommitted writes, and commits once it waits for them. */
-  const queuedBehind = async (
-    hold: (tx: DbClient) => Promise<void>,
-    request: () => PromiseLike<Response>,
-  ) => {
-    let queued: Promise<Response> | undefined;
-    await prisma.client.$transaction(async (tx) => {
-      await hold(tx);
-      queued = Promise.resolve(request());
-      queued.catch(() => undefined);
-      for (let attempt = 0; attempt < 100 && !(await lockWaiting()); attempt += 1) {
-        await new Promise((resolve) => setTimeout(resolve, 50));
-      }
-      expect(await lockWaiting()).toBe(true);
-    });
-    if (queued === undefined) throw new Error('The request was not sent');
-    return queued;
   };
 
   beforeAll(async () => {
@@ -673,6 +646,7 @@ describe('members (write)', () => {
       const address = email();
 
       const { status, body } = await queuedBehind(
+        prisma,
         (tx) => insertMember(tx, address),
         () => post({ ...draft(), email: address }),
       );
@@ -888,6 +862,7 @@ describe('members (write)', () => {
       const address = email();
 
       const { status, body } = await queuedBehind(
+        prisma,
         (tx) => insertMember(tx, address),
         () => patch(member.id, { ...newMember, email: address }),
       );
@@ -1047,6 +1022,7 @@ describe('members (write)', () => {
       const roomId = await createRoom();
 
       const { status, body } = await queuedBehind(
+        prisma,
         async (tx) => {
           const data = await bookingData(tx, id, 'confirmed', at(1), at(2), roomId);
           await tx.booking.create({ data });

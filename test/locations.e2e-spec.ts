@@ -214,7 +214,7 @@ describe('locations (write)', () => {
   };
   const get = (id: string) => api.http.get(`${BASE}/${id}`).set(auth);
 
-  /** A room straight in the table: rooms have no endpoint yet. */
+  /** A room written straight into the table. */
   const addRoom = async (
     locationId: string,
     {

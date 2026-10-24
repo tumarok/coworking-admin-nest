@@ -347,7 +347,7 @@ describe('rooms (write)', () => {
       }
     ).roomCount;
 
-  /** A booking straight in the table: bookings have no endpoint yet. */
+  /** A booking written straight into the table. */
   const addBooking = async (
     roomId: string,
     status: BookingStatus,

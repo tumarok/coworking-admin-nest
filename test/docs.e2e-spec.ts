@@ -64,6 +64,9 @@ describe('API documentation', () => {
       expect(Object.keys(schemas)).toEqual(
         expect.arrayContaining([
           'ApiError',
+          'Booking',
+          'BookingInput',
+          'BookingPage',
           'Location',
           'LocationInput',
           'LocationPage',
@@ -164,6 +167,50 @@ describe('API documentation', () => {
       ]);
       expect(responses('/api/v1/members/{id}', 'delete')['204']).not.toContain('application/json');
       expect(responses('/api/v1/members', 'post')['201']).toContain('#/components/schemas/Member');
+    });
+
+    it('documents every booking route with its success and error bodies', () => {
+      const { paths } = document();
+
+      expect(Object.keys(paths['/api/v1/bookings'] ?? {})).toEqual(['get', 'post']);
+      expect(Object.keys(paths['/api/v1/bookings/{id}'] ?? {})).toEqual(['get', 'patch']);
+      expect(Object.keys(responses('/api/v1/bookings', 'get'))).toEqual(['200', '401', '422']);
+      expect(Object.keys(responses('/api/v1/bookings', 'post'))).toEqual([
+        '201',
+        '401',
+        '409',
+        '422',
+      ]);
+      expect(Object.keys(responses('/api/v1/bookings/{id}', 'get'))).toEqual(['200', '401', '404']);
+      expect(Object.keys(responses('/api/v1/bookings/{id}', 'patch'))).toEqual([
+        '200',
+        '401',
+        '404',
+        '409',
+        '422',
+      ]);
+      expect(responses('/api/v1/bookings', 'post')['201']).toContain(
+        '#/components/schemas/Booking',
+      );
+    });
+
+    it('lists the query of the bookings list', () => {
+      const parameters = document().paths['/api/v1/bookings'].get?.parameters ?? [];
+
+      expect(
+        parameters.map((parameter) => ('name' in parameter ? parameter.name : undefined)),
+      ).toEqual(['page', 'limit', 'q', 'from', 'to', 'status', 'locationId', 'roomId', 'memberId']);
+    });
+
+    it('describes the body of a booking PATCH, which a pipe does not validate', () => {
+      const body = document().paths['/api/v1/bookings/{id}'].patch?.requestBody;
+      const schema =
+        body && 'content' in body ? body.content['application/json'].schema : undefined;
+
+      expect(schema).toMatchObject({
+        type: 'object',
+        required: expect.arrayContaining(['roomId', 'memberId', 'startsAt', 'endsAt']),
+      });
     });
 
     it('lists the query of the rooms list', () => {
