@@ -1,0 +1,23 @@
+name: coworking-admin-nest
+
+services:
+  db:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: coworking
+      # ICU makes ORDER BY on names match the mock API's locale-aware sorting.
+      POSTGRES_INITDB_ARGS: --locale-provider=icu --icu-locale=und
+    ports:
+      - '127.0.0.1:5433:5432'
+    volumes:
+      - db-data:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d coworking']
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  db-data:

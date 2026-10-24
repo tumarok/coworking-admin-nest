@@ -26,13 +26,33 @@ export default defineConfig({
   test: {
     globals: true,
     projects: [
-      { plugins, test: { name: 'unit', globals: true, env, include: ['src/**/*.spec.ts'] } },
-      { plugins, test: { name: 'e2e', globals: true, env, include: ['test/**/*.e2e-spec.ts'] } },
+      {
+        plugins,
+        test: {
+          name: 'unit',
+          globals: true,
+          env,
+          include: ['src/**/*.spec.ts', 'test/**/*.spec.ts'],
+        },
+      },
+      {
+        plugins,
+        test: {
+          name: 'e2e',
+          globals: true,
+          env,
+          include: ['test/**/*.e2e-spec.ts'],
+          globalSetup: ['test/setup/global-setup.ts'],
+          // The first run pulls the image and a slow runner needs time to start PostgreSQL.
+          hookTimeout: 120_000,
+          testTimeout: 30_000,
+        },
+      },
     ],
     coverage: {
       provider: 'v8',
       include: ['src/**/*.ts'],
-      exclude: ['src/main.ts', 'src/generated/**', 'src/**/*.spec.ts'],
+      exclude: ['src/main.ts', 'src/database/seed/cli.ts', 'src/generated/**', 'src/**/*.spec.ts'],
       reporter: ['text-summary', 'lcov'],
     },
   },

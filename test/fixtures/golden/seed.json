@@ -1,0 +1,44 @@
+{
+  "seed": 42,
+  "now": "2026-10-14T09:00:00.000Z",
+  "sequence": 1411,
+  "counts": {
+    "users": 2,
+    "locations": 5,
+    "rooms": 32,
+    "members": 80,
+    "bookings": 1294
+  },
+  "roomsByLocation": {
+    "loc_1": 7,
+    "loc_2": 7,
+    "loc_3": 5,
+    "loc_4": 6,
+    "loc_5": 7
+  },
+  "roomsByStatus": {
+    "available": 26,
+    "maintenance": 5,
+    "retired": 1
+  },
+  "membersByStatus": {
+    "active": 71,
+    "cancelled": 6,
+    "suspended": 3
+  },
+  "bookingsByStatus": {
+    "completed": 551,
+    "no_show": 34,
+    "cancelled": 111,
+    "confirmed": 402,
+    "checked_in": 7,
+    "pending": 189
+  },
+  "sha256": {
+    "users": "c5205a56beacf31637dbd35413dcd1bf8cdee1d60a586aa84a5bceb9dbe59fb8",
+    "locations": "176bd342b45d40acc4bed16e923b13a003237a40219e2d71fd0a70f74f0b6f00",
+    "rooms": "b67f5a9a7943bf11d632e9147c8d8d9c8c1d199a0ffc227000340fa6208360f6",
+    "members": "56b475bfd6a5caecfa34277429a71a02abcab929e7f273b275863e9c846e2526",
+    "bookings": "f7d0eac05a9907f070d86ffe47146cbe742425aee204e4c4214cec536d6fc69c"
+  }
+}

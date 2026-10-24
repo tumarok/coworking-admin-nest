@@ -1,0 +1,171 @@
+// Tables, enums and indexes Prisma can express. The rest lives in the migration SQL: the
+// btree_gist extension, the entity_seq sequence, the EXCLUDE constraint against double bookings
+// and the partial unique index on member emails.
+
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "esm"
+  importFileExtension = "js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  admin
+  manager
+
+  @@map("user_role")
+}
+
+enum LocationStatus {
+  active
+  inactive
+
+  @@map("location_status")
+}
+
+enum RoomType {
+  meeting_room
+  private_office
+  hot_desk
+  event_space
+
+  @@map("room_type")
+}
+
+enum RoomStatus {
+  available
+  maintenance
+  retired
+
+  @@map("room_status")
+}
+
+enum Amenity {
+  projector
+  whiteboard
+  video_conferencing
+  phone
+  standing_desks
+  natural_light
+
+  @@map("amenity")
+}
+
+enum MemberPlan {
+  day_pass
+  flex
+  dedicated
+  team
+
+  @@map("member_plan")
+}
+
+enum MemberStatus {
+  active
+  suspended
+  cancelled
+
+  @@map("member_status")
+}
+
+enum BookingStatus {
+  pending
+  confirmed
+  checked_in
+  completed
+  cancelled
+  no_show
+
+  @@map("booking_status")
+}
+
+model User {
+  id           String   @id
+  name         String
+  email        String   @unique
+  role         UserRole
+  passwordHash String   @map("password_hash")
+
+  @@map("users")
+}
+
+// `seq` is the value of the shared id counter the row's id was built from (`loc_5` -> 5). It is the
+// tie-breaker that keeps list order the same as the mock API's insertion order.
+model Location {
+  id        String         @id
+  seq       BigInt         @unique
+  name      String
+  city      String
+  address   String
+  timezone  String
+  opensAt   String         @map("opens_at")
+  closesAt  String         @map("closes_at")
+  status    LocationStatus
+  deletedAt DateTime?      @map("deleted_at") @db.Timestamptz(3)
+  rooms     Room[]
+
+  @@index([name, seq])
+  @@map("locations")
+}
+
+model Room {
+  id         String     @id
+  seq        BigInt     @unique
+  locationId String     @map("location_id")
+  name       String
+  type       RoomType
+  capacity   Int
+  hourlyRate Int        @map("hourly_rate")
+  amenities  Amenity[]
+  status     RoomStatus
+  deletedAt  DateTime?  @map("deleted_at") @db.Timestamptz(3)
+  location   Location   @relation(fields: [locationId], references: [id])
+  bookings   Booking[]
+
+  @@index([locationId])
+  @@index([name, seq])
+  @@map("rooms")
+}
+
+model Member {
+  id        String       @id
+  seq       BigInt       @unique
+  firstName String       @map("first_name")
+  lastName  String       @map("last_name")
+  email     String
+  phone     String
+  company   String?
+  plan      MemberPlan
+  status    MemberStatus
+  joinedAt  DateTime     @map("joined_at") @db.Date
+  deletedAt DateTime?    @map("deleted_at") @db.Timestamptz(3)
+  bookings  Booking[]
+
+  @@index([lastName, firstName, seq])
+  @@map("members")
+}
+
+model Booking {
+  id         String        @id
+  seq        BigInt        @unique
+  roomId     String        @map("room_id")
+  memberId   String        @map("member_id")
+  startsAt   DateTime      @map("starts_at") @db.Timestamptz(3)
+  endsAt     DateTime      @map("ends_at") @db.Timestamptz(3)
+  attendees  Int
+  status     BookingStatus
+  notes      String?
+  totalPrice Int           @map("total_price")
+  createdAt  DateTime      @map("created_at") @db.Timestamptz(3)
+  room       Room          @relation(fields: [roomId], references: [id])
+  member     Member        @relation(fields: [memberId], references: [id])
+
+  @@index([startsAt(sort: Desc), seq])
+  @@index([roomId, startsAt])
+  @@index([memberId])
+  @@map("bookings")
+}
