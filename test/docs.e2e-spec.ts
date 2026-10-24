@@ -69,6 +69,7 @@ describe('API documentation', () => {
           'BookingPage',
           'BulkBookingRequest',
           'BulkBookingResult',
+          'Dashboard',
           'Location',
           'LocationInput',
           'LocationPage',
@@ -214,6 +215,20 @@ describe('API documentation', () => {
       expect(responses('/api/v1/bookings/{id}/status', 'post')['200']).toContain(
         '#/components/schemas/Booking',
       );
+    });
+
+    it('documents the dashboard route with its query and body', () => {
+      const { paths } = document();
+      const parameters = paths['/api/v1/dashboard'].get?.parameters ?? [];
+
+      expect(Object.keys(paths['/api/v1/dashboard'] ?? {})).toEqual(['get']);
+      expect(Object.keys(responses('/api/v1/dashboard', 'get'))).toEqual(['200', '401', '422']);
+      expect(responses('/api/v1/dashboard', 'get')['200']).toContain(
+        '#/components/schemas/Dashboard',
+      );
+      expect(
+        parameters.map((parameter) => ('name' in parameter ? parameter.name : undefined)),
+      ).toEqual(['date']);
     });
 
     it('describes the body of a booking status change, which a pipe does not validate', () => {

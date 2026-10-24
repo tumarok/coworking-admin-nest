@@ -9,48 +9,20 @@ import type {
   Member,
   Room,
 } from '../../contract/index.js';
+import {
+  BOOKING_COLUMNS as COLUMNS,
+  BOOKING_FROM as FROM,
+  LOCATION_NAME,
+  MEMBER_NAME,
+  ROOM_NAME,
+} from '../../database/booking-view.js';
+import { dayStart } from '../../database/day-bounds.js';
 import { nextEntityId } from '../../database/entity-id.js';
 import { type DbClient, PrismaService } from '../../database/prisma.service.js';
 import { allOf, containsAny } from '../../database/sql-filters.js';
 import { Prisma } from '../../generated/prisma/client.js';
 import type { BookingListParams } from './bookings.types.js';
 import type { Hours } from './domain/rules.js';
-
-const DAY = 24 * 3_600_000;
-
-// PostgreSQL has no year 0 and the driver writes years past 9999 in a form it rejects, so the
-// bounds of a day filter stay within the years that every booking date can have.
-const FIRST_INSTANT = Date.parse('0001-01-01T00:00:00.000Z');
-const LAST_INSTANT = Date.parse('9999-12-31T23:59:59.999Z');
-
-/** The start of a UTC day (`YYYY-MM-DD`) or of a later one, as a bound clamped to the years the database takes. */
-const dayStart = (day: string, days = 0): Date =>
-  new Date(
-    Math.min(
-      Math.max(Date.parse(`${day}T00:00:00.000Z`) + days * DAY, FIRST_INSTANT),
-      LAST_INSTANT,
-    ),
-  );
-
-/** A timestamp as the API writes it, whatever the time zone of the session. */
-const iso = (column: string) =>
-  Prisma.raw(`to_char(${column} AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS.MS"Z"')`);
-
-// The names of a booking come from the room, the location and the member as they are now. A
-// deleted one shows as a dash, but the booking stays and the room still names its real location.
-const ROOM_NAME = Prisma.sql`CASE WHEN r.deleted_at IS NULL THEN r.name ELSE '—' END`;
-const LOCATION_NAME = Prisma.sql`CASE WHEN r.deleted_at IS NULL AND l.deleted_at IS NULL THEN l.name ELSE '—' END`;
-const MEMBER_NAME = Prisma.sql`CASE WHEN m.deleted_at IS NULL THEN m.first_name || ' ' || m.last_name ELSE '—' END`;
-
-const COLUMNS = Prisma.sql`
-  b.id, b.room_id AS "roomId", ${ROOM_NAME} AS "roomName", r.location_id AS "locationId",
-  ${LOCATION_NAME} AS "locationName", b.member_id AS "memberId", ${MEMBER_NAME} AS "memberName",
-  ${iso('b.starts_at')} AS "startsAt", ${iso('b.ends_at')} AS "endsAt", b.attendees, b.status,
-  b.notes, b.total_price AS "totalPrice", ${iso('b.created_at')} AS "createdAt"`;
-const FROM = Prisma.sql`bookings b
-  JOIN rooms r ON r.id = b.room_id
-  JOIN locations l ON l.id = r.location_id
-  JOIN members m ON m.id = b.member_id`;
 
 const findBooking = async (client: DbClient, id: string): Promise<Booking | undefined> => {
   const rows = await client.$queryRaw<Booking[]>`SELECT ${COLUMNS} FROM ${FROM} WHERE b.id = ${id}`;

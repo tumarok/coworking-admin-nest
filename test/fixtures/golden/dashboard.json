@@ -1,0 +1,2830 @@
+{
+  "seed": 42,
+  "now": "2026-10-14T09:00:00.000Z",
+  "days": {
+    "2026-10-14": {
+      "date": "2026-10-14",
+      "kpis": {
+        "bookingsToday": 23,
+        "occupancyRate": 0.1583011583011583,
+        "revenueMonth": 6267350,
+        "activeMembers": 71
+      },
+      "occupancy": [
+        {
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "bookedHours": 16,
+          "availableHours": 91
+        },
+        {
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "bookedHours": 11,
+          "availableHours": 48
+        },
+        {
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "bookedHours": 11,
+          "availableHours": 50
+        },
+        {
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "bookedHours": 3,
+          "availableHours": 70
+        }
+      ],
+      "byStatus": {
+        "pending": 1,
+        "confirmed": 8,
+        "checked_in": 7,
+        "completed": 7,
+        "cancelled": 0,
+        "no_show": 0
+      },
+      "upcoming": [
+        {
+          "id": "bk_kz",
+          "roomId": "room_6",
+          "memberId": "mem_2w",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-03T10:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Stephania Connelly-Douglas"
+        },
+        {
+          "id": "bk_l3",
+          "roomId": "room_a",
+          "memberId": "mem_13",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-10T10:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Afton Bauch"
+        },
+        {
+          "id": "bk_l5",
+          "roomId": "room_b",
+          "memberId": "mem_2u",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 6900,
+          "createdAt": "2026-10-06T10:00:00.000Z",
+          "roomName": "Aurora",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Julia Stark"
+        },
+        {
+          "id": "bk_ll",
+          "roomId": "room_t",
+          "memberId": "mem_1p",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T11:00:00.000Z",
+          "attendees": 7,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 18200,
+          "createdAt": "2026-10-07T10:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "memberName": "Jammie Beahan"
+        },
+        {
+          "id": "bk_le",
+          "roomId": "room_m",
+          "memberId": "mem_25",
+          "startsAt": "2026-10-14T11:30:00.000Z",
+          "endsAt": "2026-10-14T13:30:00.000Z",
+          "attendees": 2,
+          "status": "pending",
+          "notes": null,
+          "totalPrice": 5400,
+          "createdAt": "2026-10-08T11:30:00.000Z",
+          "roomName": "Iris",
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "memberName": "Sasha Herzog"
+        },
+        {
+          "id": "bk_lc",
+          "roomId": "room_h",
+          "memberId": "mem_1q",
+          "startsAt": "2026-10-14T12:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 2,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 7950,
+          "createdAt": "2026-10-03T12:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "memberName": "Liana Metz"
+        },
+        {
+          "id": "bk_l0",
+          "roomId": "room_6",
+          "memberId": "mem_1s",
+          "startsAt": "2026-10-14T13:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 6,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-04T13:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Marsha Bergnaum"
+        },
+        {
+          "id": "bk_l4",
+          "roomId": "room_a",
+          "memberId": "mem_1j",
+          "startsAt": "2026-10-14T14:00:00.000Z",
+          "endsAt": "2026-10-14T16:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-02T14:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Johathan Davis"
+        }
+      ]
+    },
+    "2026-10-13": {
+      "date": "2026-10-13",
+      "kpis": {
+        "bookingsToday": 19,
+        "occupancyRate": 0.14285714285714285,
+        "revenueMonth": 6267350,
+        "activeMembers": 71
+      },
+      "occupancy": [
+        {
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "bookedHours": 10,
+          "availableHours": 91
+        },
+        {
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "bookedHours": 5.5,
+          "availableHours": 48
+        },
+        {
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "bookedHours": 8.5,
+          "availableHours": 50
+        },
+        {
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "bookedHours": 13,
+          "availableHours": 70
+        }
+      ],
+      "byStatus": {
+        "pending": 0,
+        "confirmed": 0,
+        "checked_in": 0,
+        "completed": 19,
+        "cancelled": 3,
+        "no_show": 0
+      },
+      "upcoming": [
+        {
+          "id": "bk_kz",
+          "roomId": "room_6",
+          "memberId": "mem_2w",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-03T10:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Stephania Connelly-Douglas"
+        },
+        {
+          "id": "bk_l3",
+          "roomId": "room_a",
+          "memberId": "mem_13",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-10T10:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Afton Bauch"
+        },
+        {
+          "id": "bk_l5",
+          "roomId": "room_b",
+          "memberId": "mem_2u",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 6900,
+          "createdAt": "2026-10-06T10:00:00.000Z",
+          "roomName": "Aurora",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Julia Stark"
+        },
+        {
+          "id": "bk_ll",
+          "roomId": "room_t",
+          "memberId": "mem_1p",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T11:00:00.000Z",
+          "attendees": 7,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 18200,
+          "createdAt": "2026-10-07T10:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "memberName": "Jammie Beahan"
+        },
+        {
+          "id": "bk_le",
+          "roomId": "room_m",
+          "memberId": "mem_25",
+          "startsAt": "2026-10-14T11:30:00.000Z",
+          "endsAt": "2026-10-14T13:30:00.000Z",
+          "attendees": 2,
+          "status": "pending",
+          "notes": null,
+          "totalPrice": 5400,
+          "createdAt": "2026-10-08T11:30:00.000Z",
+          "roomName": "Iris",
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "memberName": "Sasha Herzog"
+        },
+        {
+          "id": "bk_lc",
+          "roomId": "room_h",
+          "memberId": "mem_1q",
+          "startsAt": "2026-10-14T12:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 2,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 7950,
+          "createdAt": "2026-10-03T12:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "memberName": "Liana Metz"
+        },
+        {
+          "id": "bk_l0",
+          "roomId": "room_6",
+          "memberId": "mem_1s",
+          "startsAt": "2026-10-14T13:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 6,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-04T13:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Marsha Bergnaum"
+        },
+        {
+          "id": "bk_l4",
+          "roomId": "room_a",
+          "memberId": "mem_1j",
+          "startsAt": "2026-10-14T14:00:00.000Z",
+          "endsAt": "2026-10-14T16:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-02T14:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Johathan Davis"
+        }
+      ]
+    },
+    "2026-10-15": {
+      "date": "2026-10-15",
+      "kpis": {
+        "bookingsToday": 29,
+        "occupancyRate": 0.20270270270270271,
+        "revenueMonth": 6267350,
+        "activeMembers": 71
+      },
+      "occupancy": [
+        {
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "bookedHours": 15.5,
+          "availableHours": 91
+        },
+        {
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "bookedHours": 9.5,
+          "availableHours": 48
+        },
+        {
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "bookedHours": 15,
+          "availableHours": 50
+        },
+        {
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "bookedHours": 12.5,
+          "availableHours": 70
+        }
+      ],
+      "byStatus": {
+        "pending": 6,
+        "confirmed": 23,
+        "checked_in": 0,
+        "completed": 0,
+        "cancelled": 1,
+        "no_show": 0
+      },
+      "upcoming": [
+        {
+          "id": "bk_kz",
+          "roomId": "room_6",
+          "memberId": "mem_2w",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-03T10:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Stephania Connelly-Douglas"
+        },
+        {
+          "id": "bk_l3",
+          "roomId": "room_a",
+          "memberId": "mem_13",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-10T10:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Afton Bauch"
+        },
+        {
+          "id": "bk_l5",
+          "roomId": "room_b",
+          "memberId": "mem_2u",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 6900,
+          "createdAt": "2026-10-06T10:00:00.000Z",
+          "roomName": "Aurora",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Julia Stark"
+        },
+        {
+          "id": "bk_ll",
+          "roomId": "room_t",
+          "memberId": "mem_1p",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T11:00:00.000Z",
+          "attendees": 7,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 18200,
+          "createdAt": "2026-10-07T10:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "memberName": "Jammie Beahan"
+        },
+        {
+          "id": "bk_le",
+          "roomId": "room_m",
+          "memberId": "mem_25",
+          "startsAt": "2026-10-14T11:30:00.000Z",
+          "endsAt": "2026-10-14T13:30:00.000Z",
+          "attendees": 2,
+          "status": "pending",
+          "notes": null,
+          "totalPrice": 5400,
+          "createdAt": "2026-10-08T11:30:00.000Z",
+          "roomName": "Iris",
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "memberName": "Sasha Herzog"
+        },
+        {
+          "id": "bk_lc",
+          "roomId": "room_h",
+          "memberId": "mem_1q",
+          "startsAt": "2026-10-14T12:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 2,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 7950,
+          "createdAt": "2026-10-03T12:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "memberName": "Liana Metz"
+        },
+        {
+          "id": "bk_l0",
+          "roomId": "room_6",
+          "memberId": "mem_1s",
+          "startsAt": "2026-10-14T13:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 6,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-04T13:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Marsha Bergnaum"
+        },
+        {
+          "id": "bk_l4",
+          "roomId": "room_a",
+          "memberId": "mem_1j",
+          "startsAt": "2026-10-14T14:00:00.000Z",
+          "endsAt": "2026-10-14T16:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-02T14:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Johathan Davis"
+        }
+      ]
+    },
+    "2026-10-07": {
+      "date": "2026-10-07",
+      "kpis": {
+        "bookingsToday": 30,
+        "occupancyRate": 0.21042471042471042,
+        "revenueMonth": 6267350,
+        "activeMembers": 71
+      },
+      "occupancy": [
+        {
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "bookedHours": 26,
+          "availableHours": 91
+        },
+        {
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "bookedHours": 11,
+          "availableHours": 48
+        },
+        {
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "bookedHours": 9.5,
+          "availableHours": 50
+        },
+        {
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "bookedHours": 8,
+          "availableHours": 70
+        }
+      ],
+      "byStatus": {
+        "pending": 0,
+        "confirmed": 0,
+        "checked_in": 0,
+        "completed": 27,
+        "cancelled": 2,
+        "no_show": 3
+      },
+      "upcoming": [
+        {
+          "id": "bk_kz",
+          "roomId": "room_6",
+          "memberId": "mem_2w",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-03T10:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Stephania Connelly-Douglas"
+        },
+        {
+          "id": "bk_l3",
+          "roomId": "room_a",
+          "memberId": "mem_13",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-10T10:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Afton Bauch"
+        },
+        {
+          "id": "bk_l5",
+          "roomId": "room_b",
+          "memberId": "mem_2u",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 6900,
+          "createdAt": "2026-10-06T10:00:00.000Z",
+          "roomName": "Aurora",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Julia Stark"
+        },
+        {
+          "id": "bk_ll",
+          "roomId": "room_t",
+          "memberId": "mem_1p",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T11:00:00.000Z",
+          "attendees": 7,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 18200,
+          "createdAt": "2026-10-07T10:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "memberName": "Jammie Beahan"
+        },
+        {
+          "id": "bk_le",
+          "roomId": "room_m",
+          "memberId": "mem_25",
+          "startsAt": "2026-10-14T11:30:00.000Z",
+          "endsAt": "2026-10-14T13:30:00.000Z",
+          "attendees": 2,
+          "status": "pending",
+          "notes": null,
+          "totalPrice": 5400,
+          "createdAt": "2026-10-08T11:30:00.000Z",
+          "roomName": "Iris",
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "memberName": "Sasha Herzog"
+        },
+        {
+          "id": "bk_lc",
+          "roomId": "room_h",
+          "memberId": "mem_1q",
+          "startsAt": "2026-10-14T12:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 2,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 7950,
+          "createdAt": "2026-10-03T12:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "memberName": "Liana Metz"
+        },
+        {
+          "id": "bk_l0",
+          "roomId": "room_6",
+          "memberId": "mem_1s",
+          "startsAt": "2026-10-14T13:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 6,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-04T13:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Marsha Bergnaum"
+        },
+        {
+          "id": "bk_l4",
+          "roomId": "room_a",
+          "memberId": "mem_1j",
+          "startsAt": "2026-10-14T14:00:00.000Z",
+          "endsAt": "2026-10-14T16:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-02T14:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Johathan Davis"
+        }
+      ]
+    },
+    "2026-10-21": {
+      "date": "2026-10-21",
+      "kpis": {
+        "bookingsToday": 32,
+        "occupancyRate": 0.20270270270270271,
+        "revenueMonth": 6267350,
+        "activeMembers": 71
+      },
+      "occupancy": [
+        {
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "bookedHours": 16,
+          "availableHours": 91
+        },
+        {
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "bookedHours": 9,
+          "availableHours": 48
+        },
+        {
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "bookedHours": 7,
+          "availableHours": 50
+        },
+        {
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "bookedHours": 20.5,
+          "availableHours": 70
+        }
+      ],
+      "byStatus": {
+        "pending": 10,
+        "confirmed": 22,
+        "checked_in": 0,
+        "completed": 0,
+        "cancelled": 2,
+        "no_show": 0
+      },
+      "upcoming": [
+        {
+          "id": "bk_kz",
+          "roomId": "room_6",
+          "memberId": "mem_2w",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-03T10:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Stephania Connelly-Douglas"
+        },
+        {
+          "id": "bk_l3",
+          "roomId": "room_a",
+          "memberId": "mem_13",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-10T10:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Afton Bauch"
+        },
+        {
+          "id": "bk_l5",
+          "roomId": "room_b",
+          "memberId": "mem_2u",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 6900,
+          "createdAt": "2026-10-06T10:00:00.000Z",
+          "roomName": "Aurora",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Julia Stark"
+        },
+        {
+          "id": "bk_ll",
+          "roomId": "room_t",
+          "memberId": "mem_1p",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T11:00:00.000Z",
+          "attendees": 7,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 18200,
+          "createdAt": "2026-10-07T10:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "memberName": "Jammie Beahan"
+        },
+        {
+          "id": "bk_le",
+          "roomId": "room_m",
+          "memberId": "mem_25",
+          "startsAt": "2026-10-14T11:30:00.000Z",
+          "endsAt": "2026-10-14T13:30:00.000Z",
+          "attendees": 2,
+          "status": "pending",
+          "notes": null,
+          "totalPrice": 5400,
+          "createdAt": "2026-10-08T11:30:00.000Z",
+          "roomName": "Iris",
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "memberName": "Sasha Herzog"
+        },
+        {
+          "id": "bk_lc",
+          "roomId": "room_h",
+          "memberId": "mem_1q",
+          "startsAt": "2026-10-14T12:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 2,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 7950,
+          "createdAt": "2026-10-03T12:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "memberName": "Liana Metz"
+        },
+        {
+          "id": "bk_l0",
+          "roomId": "room_6",
+          "memberId": "mem_1s",
+          "startsAt": "2026-10-14T13:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 6,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-04T13:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Marsha Bergnaum"
+        },
+        {
+          "id": "bk_l4",
+          "roomId": "room_a",
+          "memberId": "mem_1j",
+          "startsAt": "2026-10-14T14:00:00.000Z",
+          "endsAt": "2026-10-14T16:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-02T14:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Johathan Davis"
+        }
+      ]
+    },
+    "2026-10-17": {
+      "date": "2026-10-17",
+      "kpis": {
+        "bookingsToday": 25,
+        "occupancyRate": 0.18725868725868725,
+        "revenueMonth": 6267350,
+        "activeMembers": 71
+      },
+      "occupancy": [
+        {
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "bookedHours": 16,
+          "availableHours": 91
+        },
+        {
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "bookedHours": 12,
+          "availableHours": 48
+        },
+        {
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "bookedHours": 12.5,
+          "availableHours": 50
+        },
+        {
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "bookedHours": 8,
+          "availableHours": 70
+        }
+      ],
+      "byStatus": {
+        "pending": 4,
+        "confirmed": 21,
+        "checked_in": 0,
+        "completed": 0,
+        "cancelled": 7,
+        "no_show": 0
+      },
+      "upcoming": [
+        {
+          "id": "bk_kz",
+          "roomId": "room_6",
+          "memberId": "mem_2w",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-03T10:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Stephania Connelly-Douglas"
+        },
+        {
+          "id": "bk_l3",
+          "roomId": "room_a",
+          "memberId": "mem_13",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-10T10:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Afton Bauch"
+        },
+        {
+          "id": "bk_l5",
+          "roomId": "room_b",
+          "memberId": "mem_2u",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 6900,
+          "createdAt": "2026-10-06T10:00:00.000Z",
+          "roomName": "Aurora",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Julia Stark"
+        },
+        {
+          "id": "bk_ll",
+          "roomId": "room_t",
+          "memberId": "mem_1p",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T11:00:00.000Z",
+          "attendees": 7,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 18200,
+          "createdAt": "2026-10-07T10:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "memberName": "Jammie Beahan"
+        },
+        {
+          "id": "bk_le",
+          "roomId": "room_m",
+          "memberId": "mem_25",
+          "startsAt": "2026-10-14T11:30:00.000Z",
+          "endsAt": "2026-10-14T13:30:00.000Z",
+          "attendees": 2,
+          "status": "pending",
+          "notes": null,
+          "totalPrice": 5400,
+          "createdAt": "2026-10-08T11:30:00.000Z",
+          "roomName": "Iris",
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "memberName": "Sasha Herzog"
+        },
+        {
+          "id": "bk_lc",
+          "roomId": "room_h",
+          "memberId": "mem_1q",
+          "startsAt": "2026-10-14T12:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 2,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 7950,
+          "createdAt": "2026-10-03T12:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "memberName": "Liana Metz"
+        },
+        {
+          "id": "bk_l0",
+          "roomId": "room_6",
+          "memberId": "mem_1s",
+          "startsAt": "2026-10-14T13:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 6,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-04T13:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Marsha Bergnaum"
+        },
+        {
+          "id": "bk_l4",
+          "roomId": "room_a",
+          "memberId": "mem_1j",
+          "startsAt": "2026-10-14T14:00:00.000Z",
+          "endsAt": "2026-10-14T16:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-02T14:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Johathan Davis"
+        }
+      ]
+    },
+    "2026-10-18": {
+      "date": "2026-10-18",
+      "kpis": {
+        "bookingsToday": 30,
+        "occupancyRate": 0.21428571428571427,
+        "revenueMonth": 6267350,
+        "activeMembers": 71
+      },
+      "occupancy": [
+        {
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "bookedHours": 20.5,
+          "availableHours": 91
+        },
+        {
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "bookedHours": 13.5,
+          "availableHours": 48
+        },
+        {
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "bookedHours": 11,
+          "availableHours": 50
+        },
+        {
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "bookedHours": 10.5,
+          "availableHours": 70
+        }
+      ],
+      "byStatus": {
+        "pending": 12,
+        "confirmed": 18,
+        "checked_in": 0,
+        "completed": 0,
+        "cancelled": 3,
+        "no_show": 0
+      },
+      "upcoming": [
+        {
+          "id": "bk_kz",
+          "roomId": "room_6",
+          "memberId": "mem_2w",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-03T10:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Stephania Connelly-Douglas"
+        },
+        {
+          "id": "bk_l3",
+          "roomId": "room_a",
+          "memberId": "mem_13",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-10T10:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Afton Bauch"
+        },
+        {
+          "id": "bk_l5",
+          "roomId": "room_b",
+          "memberId": "mem_2u",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 6900,
+          "createdAt": "2026-10-06T10:00:00.000Z",
+          "roomName": "Aurora",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Julia Stark"
+        },
+        {
+          "id": "bk_ll",
+          "roomId": "room_t",
+          "memberId": "mem_1p",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T11:00:00.000Z",
+          "attendees": 7,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 18200,
+          "createdAt": "2026-10-07T10:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "memberName": "Jammie Beahan"
+        },
+        {
+          "id": "bk_le",
+          "roomId": "room_m",
+          "memberId": "mem_25",
+          "startsAt": "2026-10-14T11:30:00.000Z",
+          "endsAt": "2026-10-14T13:30:00.000Z",
+          "attendees": 2,
+          "status": "pending",
+          "notes": null,
+          "totalPrice": 5400,
+          "createdAt": "2026-10-08T11:30:00.000Z",
+          "roomName": "Iris",
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "memberName": "Sasha Herzog"
+        },
+        {
+          "id": "bk_lc",
+          "roomId": "room_h",
+          "memberId": "mem_1q",
+          "startsAt": "2026-10-14T12:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 2,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 7950,
+          "createdAt": "2026-10-03T12:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "memberName": "Liana Metz"
+        },
+        {
+          "id": "bk_l0",
+          "roomId": "room_6",
+          "memberId": "mem_1s",
+          "startsAt": "2026-10-14T13:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 6,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-04T13:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Marsha Bergnaum"
+        },
+        {
+          "id": "bk_l4",
+          "roomId": "room_a",
+          "memberId": "mem_1j",
+          "startsAt": "2026-10-14T14:00:00.000Z",
+          "endsAt": "2026-10-14T16:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-02T14:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Johathan Davis"
+        }
+      ]
+    },
+    "2026-09-30": {
+      "date": "2026-09-30",
+      "kpis": {
+        "bookingsToday": 28,
+        "occupancyRate": 0.19305019305019305,
+        "revenueMonth": 1734750,
+        "activeMembers": 71
+      },
+      "occupancy": [
+        {
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "bookedHours": 17,
+          "availableHours": 91
+        },
+        {
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "bookedHours": 11.5,
+          "availableHours": 48
+        },
+        {
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "bookedHours": 16,
+          "availableHours": 50
+        },
+        {
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "bookedHours": 5.5,
+          "availableHours": 70
+        }
+      ],
+      "byStatus": {
+        "pending": 0,
+        "confirmed": 0,
+        "checked_in": 0,
+        "completed": 27,
+        "cancelled": 4,
+        "no_show": 1
+      },
+      "upcoming": [
+        {
+          "id": "bk_kz",
+          "roomId": "room_6",
+          "memberId": "mem_2w",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-03T10:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Stephania Connelly-Douglas"
+        },
+        {
+          "id": "bk_l3",
+          "roomId": "room_a",
+          "memberId": "mem_13",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-10T10:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Afton Bauch"
+        },
+        {
+          "id": "bk_l5",
+          "roomId": "room_b",
+          "memberId": "mem_2u",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 6900,
+          "createdAt": "2026-10-06T10:00:00.000Z",
+          "roomName": "Aurora",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Julia Stark"
+        },
+        {
+          "id": "bk_ll",
+          "roomId": "room_t",
+          "memberId": "mem_1p",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T11:00:00.000Z",
+          "attendees": 7,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 18200,
+          "createdAt": "2026-10-07T10:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "memberName": "Jammie Beahan"
+        },
+        {
+          "id": "bk_le",
+          "roomId": "room_m",
+          "memberId": "mem_25",
+          "startsAt": "2026-10-14T11:30:00.000Z",
+          "endsAt": "2026-10-14T13:30:00.000Z",
+          "attendees": 2,
+          "status": "pending",
+          "notes": null,
+          "totalPrice": 5400,
+          "createdAt": "2026-10-08T11:30:00.000Z",
+          "roomName": "Iris",
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "memberName": "Sasha Herzog"
+        },
+        {
+          "id": "bk_lc",
+          "roomId": "room_h",
+          "memberId": "mem_1q",
+          "startsAt": "2026-10-14T12:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 2,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 7950,
+          "createdAt": "2026-10-03T12:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "memberName": "Liana Metz"
+        },
+        {
+          "id": "bk_l0",
+          "roomId": "room_6",
+          "memberId": "mem_1s",
+          "startsAt": "2026-10-14T13:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 6,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-04T13:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Marsha Bergnaum"
+        },
+        {
+          "id": "bk_l4",
+          "roomId": "room_a",
+          "memberId": "mem_1j",
+          "startsAt": "2026-10-14T14:00:00.000Z",
+          "endsAt": "2026-10-14T16:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-02T14:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Johathan Davis"
+        }
+      ]
+    },
+    "2026-10-01": {
+      "date": "2026-10-01",
+      "kpis": {
+        "bookingsToday": 22,
+        "occupancyRate": 0.14671814671814673,
+        "revenueMonth": 6267350,
+        "activeMembers": 71
+      },
+      "occupancy": [
+        {
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "bookedHours": 6,
+          "availableHours": 91
+        },
+        {
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "bookedHours": 7,
+          "availableHours": 48
+        },
+        {
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "bookedHours": 12,
+          "availableHours": 50
+        },
+        {
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "bookedHours": 13,
+          "availableHours": 70
+        }
+      ],
+      "byStatus": {
+        "pending": 0,
+        "confirmed": 0,
+        "checked_in": 0,
+        "completed": 20,
+        "cancelled": 4,
+        "no_show": 2
+      },
+      "upcoming": [
+        {
+          "id": "bk_kz",
+          "roomId": "room_6",
+          "memberId": "mem_2w",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-03T10:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Stephania Connelly-Douglas"
+        },
+        {
+          "id": "bk_l3",
+          "roomId": "room_a",
+          "memberId": "mem_13",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-10T10:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Afton Bauch"
+        },
+        {
+          "id": "bk_l5",
+          "roomId": "room_b",
+          "memberId": "mem_2u",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 6900,
+          "createdAt": "2026-10-06T10:00:00.000Z",
+          "roomName": "Aurora",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Julia Stark"
+        },
+        {
+          "id": "bk_ll",
+          "roomId": "room_t",
+          "memberId": "mem_1p",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T11:00:00.000Z",
+          "attendees": 7,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 18200,
+          "createdAt": "2026-10-07T10:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "memberName": "Jammie Beahan"
+        },
+        {
+          "id": "bk_le",
+          "roomId": "room_m",
+          "memberId": "mem_25",
+          "startsAt": "2026-10-14T11:30:00.000Z",
+          "endsAt": "2026-10-14T13:30:00.000Z",
+          "attendees": 2,
+          "status": "pending",
+          "notes": null,
+          "totalPrice": 5400,
+          "createdAt": "2026-10-08T11:30:00.000Z",
+          "roomName": "Iris",
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "memberName": "Sasha Herzog"
+        },
+        {
+          "id": "bk_lc",
+          "roomId": "room_h",
+          "memberId": "mem_1q",
+          "startsAt": "2026-10-14T12:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 2,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 7950,
+          "createdAt": "2026-10-03T12:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "memberName": "Liana Metz"
+        },
+        {
+          "id": "bk_l0",
+          "roomId": "room_6",
+          "memberId": "mem_1s",
+          "startsAt": "2026-10-14T13:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 6,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-04T13:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Marsha Bergnaum"
+        },
+        {
+          "id": "bk_l4",
+          "roomId": "room_a",
+          "memberId": "mem_1j",
+          "startsAt": "2026-10-14T14:00:00.000Z",
+          "endsAt": "2026-10-14T16:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-02T14:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Johathan Davis"
+        }
+      ]
+    },
+    "2026-10-31": {
+      "date": "2026-10-31",
+      "kpis": {
+        "bookingsToday": 25,
+        "occupancyRate": 0.17953667953667954,
+        "revenueMonth": 6267350,
+        "activeMembers": 71
+      },
+      "occupancy": [
+        {
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "bookedHours": 18.5,
+          "availableHours": 91
+        },
+        {
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "bookedHours": 5.5,
+          "availableHours": 48
+        },
+        {
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "bookedHours": 4.5,
+          "availableHours": 50
+        },
+        {
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "bookedHours": 18,
+          "availableHours": 70
+        }
+      ],
+      "byStatus": {
+        "pending": 9,
+        "confirmed": 16,
+        "checked_in": 0,
+        "completed": 0,
+        "cancelled": 2,
+        "no_show": 0
+      },
+      "upcoming": [
+        {
+          "id": "bk_kz",
+          "roomId": "room_6",
+          "memberId": "mem_2w",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-03T10:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Stephania Connelly-Douglas"
+        },
+        {
+          "id": "bk_l3",
+          "roomId": "room_a",
+          "memberId": "mem_13",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-10T10:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Afton Bauch"
+        },
+        {
+          "id": "bk_l5",
+          "roomId": "room_b",
+          "memberId": "mem_2u",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 6900,
+          "createdAt": "2026-10-06T10:00:00.000Z",
+          "roomName": "Aurora",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Julia Stark"
+        },
+        {
+          "id": "bk_ll",
+          "roomId": "room_t",
+          "memberId": "mem_1p",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T11:00:00.000Z",
+          "attendees": 7,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 18200,
+          "createdAt": "2026-10-07T10:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "memberName": "Jammie Beahan"
+        },
+        {
+          "id": "bk_le",
+          "roomId": "room_m",
+          "memberId": "mem_25",
+          "startsAt": "2026-10-14T11:30:00.000Z",
+          "endsAt": "2026-10-14T13:30:00.000Z",
+          "attendees": 2,
+          "status": "pending",
+          "notes": null,
+          "totalPrice": 5400,
+          "createdAt": "2026-10-08T11:30:00.000Z",
+          "roomName": "Iris",
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "memberName": "Sasha Herzog"
+        },
+        {
+          "id": "bk_lc",
+          "roomId": "room_h",
+          "memberId": "mem_1q",
+          "startsAt": "2026-10-14T12:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 2,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 7950,
+          "createdAt": "2026-10-03T12:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "memberName": "Liana Metz"
+        },
+        {
+          "id": "bk_l0",
+          "roomId": "room_6",
+          "memberId": "mem_1s",
+          "startsAt": "2026-10-14T13:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 6,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-04T13:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Marsha Bergnaum"
+        },
+        {
+          "id": "bk_l4",
+          "roomId": "room_a",
+          "memberId": "mem_1j",
+          "startsAt": "2026-10-14T14:00:00.000Z",
+          "endsAt": "2026-10-14T16:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-02T14:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Johathan Davis"
+        }
+      ]
+    },
+    "2026-11-01": {
+      "date": "2026-11-01",
+      "kpis": {
+        "bookingsToday": 21,
+        "occupancyRate": 0.16795366795366795,
+        "revenueMonth": 546325,
+        "activeMembers": 71
+      },
+      "occupancy": [
+        {
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "bookedHours": 24,
+          "availableHours": 91
+        },
+        {
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "bookedHours": 0,
+          "availableHours": 48
+        },
+        {
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "bookedHours": 10.5,
+          "availableHours": 50
+        },
+        {
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "bookedHours": 9,
+          "availableHours": 70
+        }
+      ],
+      "byStatus": {
+        "pending": 5,
+        "confirmed": 16,
+        "checked_in": 0,
+        "completed": 0,
+        "cancelled": 1,
+        "no_show": 0
+      },
+      "upcoming": [
+        {
+          "id": "bk_kz",
+          "roomId": "room_6",
+          "memberId": "mem_2w",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-03T10:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Stephania Connelly-Douglas"
+        },
+        {
+          "id": "bk_l3",
+          "roomId": "room_a",
+          "memberId": "mem_13",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-10T10:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Afton Bauch"
+        },
+        {
+          "id": "bk_l5",
+          "roomId": "room_b",
+          "memberId": "mem_2u",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 6900,
+          "createdAt": "2026-10-06T10:00:00.000Z",
+          "roomName": "Aurora",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Julia Stark"
+        },
+        {
+          "id": "bk_ll",
+          "roomId": "room_t",
+          "memberId": "mem_1p",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T11:00:00.000Z",
+          "attendees": 7,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 18200,
+          "createdAt": "2026-10-07T10:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "memberName": "Jammie Beahan"
+        },
+        {
+          "id": "bk_le",
+          "roomId": "room_m",
+          "memberId": "mem_25",
+          "startsAt": "2026-10-14T11:30:00.000Z",
+          "endsAt": "2026-10-14T13:30:00.000Z",
+          "attendees": 2,
+          "status": "pending",
+          "notes": null,
+          "totalPrice": 5400,
+          "createdAt": "2026-10-08T11:30:00.000Z",
+          "roomName": "Iris",
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "memberName": "Sasha Herzog"
+        },
+        {
+          "id": "bk_lc",
+          "roomId": "room_h",
+          "memberId": "mem_1q",
+          "startsAt": "2026-10-14T12:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 2,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 7950,
+          "createdAt": "2026-10-03T12:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "memberName": "Liana Metz"
+        },
+        {
+          "id": "bk_l0",
+          "roomId": "room_6",
+          "memberId": "mem_1s",
+          "startsAt": "2026-10-14T13:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 6,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-04T13:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Marsha Bergnaum"
+        },
+        {
+          "id": "bk_l4",
+          "roomId": "room_a",
+          "memberId": "mem_1j",
+          "startsAt": "2026-10-14T14:00:00.000Z",
+          "endsAt": "2026-10-14T16:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-02T14:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Johathan Davis"
+        }
+      ]
+    },
+    "2026-08-15": {
+      "date": "2026-08-15",
+      "kpis": {
+        "bookingsToday": 0,
+        "occupancyRate": 0,
+        "revenueMonth": 0,
+        "activeMembers": 71
+      },
+      "occupancy": [
+        {
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "bookedHours": 0,
+          "availableHours": 91
+        },
+        {
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "bookedHours": 0,
+          "availableHours": 48
+        },
+        {
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "bookedHours": 0,
+          "availableHours": 50
+        },
+        {
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "bookedHours": 0,
+          "availableHours": 70
+        }
+      ],
+      "byStatus": {
+        "pending": 0,
+        "confirmed": 0,
+        "checked_in": 0,
+        "completed": 0,
+        "cancelled": 0,
+        "no_show": 0
+      },
+      "upcoming": [
+        {
+          "id": "bk_kz",
+          "roomId": "room_6",
+          "memberId": "mem_2w",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-03T10:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Stephania Connelly-Douglas"
+        },
+        {
+          "id": "bk_l3",
+          "roomId": "room_a",
+          "memberId": "mem_13",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-10T10:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Afton Bauch"
+        },
+        {
+          "id": "bk_l5",
+          "roomId": "room_b",
+          "memberId": "mem_2u",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 6900,
+          "createdAt": "2026-10-06T10:00:00.000Z",
+          "roomName": "Aurora",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Julia Stark"
+        },
+        {
+          "id": "bk_ll",
+          "roomId": "room_t",
+          "memberId": "mem_1p",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T11:00:00.000Z",
+          "attendees": 7,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 18200,
+          "createdAt": "2026-10-07T10:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "memberName": "Jammie Beahan"
+        },
+        {
+          "id": "bk_le",
+          "roomId": "room_m",
+          "memberId": "mem_25",
+          "startsAt": "2026-10-14T11:30:00.000Z",
+          "endsAt": "2026-10-14T13:30:00.000Z",
+          "attendees": 2,
+          "status": "pending",
+          "notes": null,
+          "totalPrice": 5400,
+          "createdAt": "2026-10-08T11:30:00.000Z",
+          "roomName": "Iris",
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "memberName": "Sasha Herzog"
+        },
+        {
+          "id": "bk_lc",
+          "roomId": "room_h",
+          "memberId": "mem_1q",
+          "startsAt": "2026-10-14T12:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 2,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 7950,
+          "createdAt": "2026-10-03T12:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "memberName": "Liana Metz"
+        },
+        {
+          "id": "bk_l0",
+          "roomId": "room_6",
+          "memberId": "mem_1s",
+          "startsAt": "2026-10-14T13:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 6,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-04T13:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Marsha Bergnaum"
+        },
+        {
+          "id": "bk_l4",
+          "roomId": "room_a",
+          "memberId": "mem_1j",
+          "startsAt": "2026-10-14T14:00:00.000Z",
+          "endsAt": "2026-10-14T16:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-02T14:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Johathan Davis"
+        }
+      ]
+    },
+    "2027-03-01": {
+      "date": "2027-03-01",
+      "kpis": {
+        "bookingsToday": 0,
+        "occupancyRate": 0,
+        "revenueMonth": 0,
+        "activeMembers": 71
+      },
+      "occupancy": [
+        {
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "bookedHours": 0,
+          "availableHours": 91
+        },
+        {
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "bookedHours": 0,
+          "availableHours": 48
+        },
+        {
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "bookedHours": 0,
+          "availableHours": 50
+        },
+        {
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "bookedHours": 0,
+          "availableHours": 70
+        }
+      ],
+      "byStatus": {
+        "pending": 0,
+        "confirmed": 0,
+        "checked_in": 0,
+        "completed": 0,
+        "cancelled": 0,
+        "no_show": 0
+      },
+      "upcoming": [
+        {
+          "id": "bk_kz",
+          "roomId": "room_6",
+          "memberId": "mem_2w",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-03T10:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Stephania Connelly-Douglas"
+        },
+        {
+          "id": "bk_l3",
+          "roomId": "room_a",
+          "memberId": "mem_13",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-10T10:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Afton Bauch"
+        },
+        {
+          "id": "bk_l5",
+          "roomId": "room_b",
+          "memberId": "mem_2u",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 6900,
+          "createdAt": "2026-10-06T10:00:00.000Z",
+          "roomName": "Aurora",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Julia Stark"
+        },
+        {
+          "id": "bk_ll",
+          "roomId": "room_t",
+          "memberId": "mem_1p",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T11:00:00.000Z",
+          "attendees": 7,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 18200,
+          "createdAt": "2026-10-07T10:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "memberName": "Jammie Beahan"
+        },
+        {
+          "id": "bk_le",
+          "roomId": "room_m",
+          "memberId": "mem_25",
+          "startsAt": "2026-10-14T11:30:00.000Z",
+          "endsAt": "2026-10-14T13:30:00.000Z",
+          "attendees": 2,
+          "status": "pending",
+          "notes": null,
+          "totalPrice": 5400,
+          "createdAt": "2026-10-08T11:30:00.000Z",
+          "roomName": "Iris",
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "memberName": "Sasha Herzog"
+        },
+        {
+          "id": "bk_lc",
+          "roomId": "room_h",
+          "memberId": "mem_1q",
+          "startsAt": "2026-10-14T12:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 2,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 7950,
+          "createdAt": "2026-10-03T12:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "memberName": "Liana Metz"
+        },
+        {
+          "id": "bk_l0",
+          "roomId": "room_6",
+          "memberId": "mem_1s",
+          "startsAt": "2026-10-14T13:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 6,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-04T13:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Marsha Bergnaum"
+        },
+        {
+          "id": "bk_l4",
+          "roomId": "room_a",
+          "memberId": "mem_1j",
+          "startsAt": "2026-10-14T14:00:00.000Z",
+          "endsAt": "2026-10-14T16:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-02T14:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Johathan Davis"
+        }
+      ]
+    },
+    "2028-02-29": {
+      "date": "2028-02-29",
+      "kpis": {
+        "bookingsToday": 0,
+        "occupancyRate": 0,
+        "revenueMonth": 0,
+        "activeMembers": 71
+      },
+      "occupancy": [
+        {
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "bookedHours": 0,
+          "availableHours": 91
+        },
+        {
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "bookedHours": 0,
+          "availableHours": 48
+        },
+        {
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "bookedHours": 0,
+          "availableHours": 50
+        },
+        {
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "bookedHours": 0,
+          "availableHours": 70
+        }
+      ],
+      "byStatus": {
+        "pending": 0,
+        "confirmed": 0,
+        "checked_in": 0,
+        "completed": 0,
+        "cancelled": 0,
+        "no_show": 0
+      },
+      "upcoming": [
+        {
+          "id": "bk_kz",
+          "roomId": "room_6",
+          "memberId": "mem_2w",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-03T10:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Stephania Connelly-Douglas"
+        },
+        {
+          "id": "bk_l3",
+          "roomId": "room_a",
+          "memberId": "mem_13",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-10T10:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Afton Bauch"
+        },
+        {
+          "id": "bk_l5",
+          "roomId": "room_b",
+          "memberId": "mem_2u",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T12:00:00.000Z",
+          "attendees": 5,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 6900,
+          "createdAt": "2026-10-06T10:00:00.000Z",
+          "roomName": "Aurora",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Julia Stark"
+        },
+        {
+          "id": "bk_ll",
+          "roomId": "room_t",
+          "memberId": "mem_1p",
+          "startsAt": "2026-10-14T10:00:00.000Z",
+          "endsAt": "2026-10-14T11:00:00.000Z",
+          "attendees": 7,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 18200,
+          "createdAt": "2026-10-07T10:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_4",
+          "locationName": "Canal Yard",
+          "memberName": "Jammie Beahan"
+        },
+        {
+          "id": "bk_le",
+          "roomId": "room_m",
+          "memberId": "mem_25",
+          "startsAt": "2026-10-14T11:30:00.000Z",
+          "endsAt": "2026-10-14T13:30:00.000Z",
+          "attendees": 2,
+          "status": "pending",
+          "notes": null,
+          "totalPrice": 5400,
+          "createdAt": "2026-10-08T11:30:00.000Z",
+          "roomName": "Iris",
+          "locationId": "loc_3",
+          "locationName": "Old Mill Works",
+          "memberName": "Sasha Herzog"
+        },
+        {
+          "id": "bk_lc",
+          "roomId": "room_h",
+          "memberId": "mem_1q",
+          "startsAt": "2026-10-14T12:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 2,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 7950,
+          "createdAt": "2026-10-03T12:00:00.000Z",
+          "roomName": "Juniper",
+          "locationId": "loc_2",
+          "locationName": "Market Square Loft",
+          "memberName": "Liana Metz"
+        },
+        {
+          "id": "bk_l0",
+          "roomId": "room_6",
+          "memberId": "mem_1s",
+          "startsAt": "2026-10-14T13:00:00.000Z",
+          "endsAt": "2026-10-14T15:00:00.000Z",
+          "attendees": 6,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 1300,
+          "createdAt": "2026-10-04T13:00:00.000Z",
+          "roomName": "Granite",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Marsha Bergnaum"
+        },
+        {
+          "id": "bk_l4",
+          "roomId": "room_a",
+          "memberId": "mem_1j",
+          "startsAt": "2026-10-14T14:00:00.000Z",
+          "endsAt": "2026-10-14T16:00:00.000Z",
+          "attendees": 1,
+          "status": "confirmed",
+          "notes": null,
+          "totalPrice": 3100,
+          "createdAt": "2026-10-02T14:00:00.000Z",
+          "roomName": "Lumen",
+          "locationId": "loc_1",
+          "locationName": "Riverside Hub",
+          "memberName": "Johathan Davis"
+        }
+      ]
+    }
+  },
+  "default": {
+    "date": "2026-10-14",
+    "kpis": {
+      "bookingsToday": 23,
+      "occupancyRate": 0.1583011583011583,
+      "revenueMonth": 6267350,
+      "activeMembers": 71
+    },
+    "occupancy": [
+      {
+        "locationId": "loc_1",
+        "locationName": "Riverside Hub",
+        "bookedHours": 16,
+        "availableHours": 91
+      },
+      {
+        "locationId": "loc_2",
+        "locationName": "Market Square Loft",
+        "bookedHours": 11,
+        "availableHours": 48
+      },
+      {
+        "locationId": "loc_3",
+        "locationName": "Old Mill Works",
+        "bookedHours": 11,
+        "availableHours": 50
+      },
+      {
+        "locationId": "loc_4",
+        "locationName": "Canal Yard",
+        "bookedHours": 3,
+        "availableHours": 70
+      }
+    ],
+    "byStatus": {
+      "pending": 1,
+      "confirmed": 8,
+      "checked_in": 7,
+      "completed": 7,
+      "cancelled": 0,
+      "no_show": 0
+    },
+    "upcoming": [
+      {
+        "id": "bk_kz",
+        "roomId": "room_6",
+        "memberId": "mem_2w",
+        "startsAt": "2026-10-14T10:00:00.000Z",
+        "endsAt": "2026-10-14T12:00:00.000Z",
+        "attendees": 1,
+        "status": "confirmed",
+        "notes": null,
+        "totalPrice": 1300,
+        "createdAt": "2026-10-03T10:00:00.000Z",
+        "roomName": "Granite",
+        "locationId": "loc_1",
+        "locationName": "Riverside Hub",
+        "memberName": "Stephania Connelly-Douglas"
+      },
+      {
+        "id": "bk_l3",
+        "roomId": "room_a",
+        "memberId": "mem_13",
+        "startsAt": "2026-10-14T10:00:00.000Z",
+        "endsAt": "2026-10-14T12:00:00.000Z",
+        "attendees": 5,
+        "status": "confirmed",
+        "notes": null,
+        "totalPrice": 3100,
+        "createdAt": "2026-10-10T10:00:00.000Z",
+        "roomName": "Lumen",
+        "locationId": "loc_1",
+        "locationName": "Riverside Hub",
+        "memberName": "Afton Bauch"
+      },
+      {
+        "id": "bk_l5",
+        "roomId": "room_b",
+        "memberId": "mem_2u",
+        "startsAt": "2026-10-14T10:00:00.000Z",
+        "endsAt": "2026-10-14T12:00:00.000Z",
+        "attendees": 5,
+        "status": "confirmed",
+        "notes": null,
+        "totalPrice": 6900,
+        "createdAt": "2026-10-06T10:00:00.000Z",
+        "roomName": "Aurora",
+        "locationId": "loc_1",
+        "locationName": "Riverside Hub",
+        "memberName": "Julia Stark"
+      },
+      {
+        "id": "bk_ll",
+        "roomId": "room_t",
+        "memberId": "mem_1p",
+        "startsAt": "2026-10-14T10:00:00.000Z",
+        "endsAt": "2026-10-14T11:00:00.000Z",
+        "attendees": 7,
+        "status": "confirmed",
+        "notes": null,
+        "totalPrice": 18200,
+        "createdAt": "2026-10-07T10:00:00.000Z",
+        "roomName": "Juniper",
+        "locationId": "loc_4",
+        "locationName": "Canal Yard",
+        "memberName": "Jammie Beahan"
+      },
+      {
+        "id": "bk_le",
+        "roomId": "room_m",
+        "memberId": "mem_25",
+        "startsAt": "2026-10-14T11:30:00.000Z",
+        "endsAt": "2026-10-14T13:30:00.000Z",
+        "attendees": 2,
+        "status": "pending",
+        "notes": null,
+        "totalPrice": 5400,
+        "createdAt": "2026-10-08T11:30:00.000Z",
+        "roomName": "Iris",
+        "locationId": "loc_3",
+        "locationName": "Old Mill Works",
+        "memberName": "Sasha Herzog"
+      },
+      {
+        "id": "bk_lc",
+        "roomId": "room_h",
+        "memberId": "mem_1q",
+        "startsAt": "2026-10-14T12:00:00.000Z",
+        "endsAt": "2026-10-14T15:00:00.000Z",
+        "attendees": 2,
+        "status": "confirmed",
+        "notes": null,
+        "totalPrice": 7950,
+        "createdAt": "2026-10-03T12:00:00.000Z",
+        "roomName": "Juniper",
+        "locationId": "loc_2",
+        "locationName": "Market Square Loft",
+        "memberName": "Liana Metz"
+      },
+      {
+        "id": "bk_l0",
+        "roomId": "room_6",
+        "memberId": "mem_1s",
+        "startsAt": "2026-10-14T13:00:00.000Z",
+        "endsAt": "2026-10-14T15:00:00.000Z",
+        "attendees": 6,
+        "status": "confirmed",
+        "notes": null,
+        "totalPrice": 1300,
+        "createdAt": "2026-10-04T13:00:00.000Z",
+        "roomName": "Granite",
+        "locationId": "loc_1",
+        "locationName": "Riverside Hub",
+        "memberName": "Marsha Bergnaum"
+      },
+      {
+        "id": "bk_l4",
+        "roomId": "room_a",
+        "memberId": "mem_1j",
+        "startsAt": "2026-10-14T14:00:00.000Z",
+        "endsAt": "2026-10-14T16:00:00.000Z",
+        "attendees": 1,
+        "status": "confirmed",
+        "notes": null,
+        "totalPrice": 3100,
+        "createdAt": "2026-10-02T14:00:00.000Z",
+        "roomName": "Lumen",
+        "locationId": "loc_1",
+        "locationName": "Riverside Hub",
+        "memberName": "Johathan Davis"
+      }
+    ]
+  },
+  "emptyDate": {
+    "date": "2026-10-14",
+    "kpis": {
+      "bookingsToday": 23,
+      "occupancyRate": 0.1583011583011583,
+      "revenueMonth": 6267350,
+      "activeMembers": 71
+    },
+    "occupancy": [
+      {
+        "locationId": "loc_1",
+        "locationName": "Riverside Hub",
+        "bookedHours": 16,
+        "availableHours": 91
+      },
+      {
+        "locationId": "loc_2",
+        "locationName": "Market Square Loft",
+        "bookedHours": 11,
+        "availableHours": 48
+      },
+      {
+        "locationId": "loc_3",
+        "locationName": "Old Mill Works",
+        "bookedHours": 11,
+        "availableHours": 50
+      },
+      {
+        "locationId": "loc_4",
+        "locationName": "Canal Yard",
+        "bookedHours": 3,
+        "availableHours": 70
+      }
+    ],
+    "byStatus": {
+      "pending": 1,
+      "confirmed": 8,
+      "checked_in": 7,
+      "completed": 7,
+      "cancelled": 0,
+      "no_show": 0
+    },
+    "upcoming": [
+      {
+        "id": "bk_kz",
+        "roomId": "room_6",
+        "memberId": "mem_2w",
+        "startsAt": "2026-10-14T10:00:00.000Z",
+        "endsAt": "2026-10-14T12:00:00.000Z",
+        "attendees": 1,
+        "status": "confirmed",
+        "notes": null,
+        "totalPrice": 1300,
+        "createdAt": "2026-10-03T10:00:00.000Z",
+        "roomName": "Granite",
+        "locationId": "loc_1",
+        "locationName": "Riverside Hub",
+        "memberName": "Stephania Connelly-Douglas"
+      },
+      {
+        "id": "bk_l3",
+        "roomId": "room_a",
+        "memberId": "mem_13",
+        "startsAt": "2026-10-14T10:00:00.000Z",
+        "endsAt": "2026-10-14T12:00:00.000Z",
+        "attendees": 5,
+        "status": "confirmed",
+        "notes": null,
+        "totalPrice": 3100,
+        "createdAt": "2026-10-10T10:00:00.000Z",
+        "roomName": "Lumen",
+        "locationId": "loc_1",
+        "locationName": "Riverside Hub",
+        "memberName": "Afton Bauch"
+      },
+      {
+        "id": "bk_l5",
+        "roomId": "room_b",
+        "memberId": "mem_2u",
+        "startsAt": "2026-10-14T10:00:00.000Z",
+        "endsAt": "2026-10-14T12:00:00.000Z",
+        "attendees": 5,
+        "status": "confirmed",
+        "notes": null,
+        "totalPrice": 6900,
+        "createdAt": "2026-10-06T10:00:00.000Z",
+        "roomName": "Aurora",
+        "locationId": "loc_1",
+        "locationName": "Riverside Hub",
+        "memberName": "Julia Stark"
+      },
+      {
+        "id": "bk_ll",
+        "roomId": "room_t",
+        "memberId": "mem_1p",
+        "startsAt": "2026-10-14T10:00:00.000Z",
+        "endsAt": "2026-10-14T11:00:00.000Z",
+        "attendees": 7,
+        "status": "confirmed",
+        "notes": null,
+        "totalPrice": 18200,
+        "createdAt": "2026-10-07T10:00:00.000Z",
+        "roomName": "Juniper",
+        "locationId": "loc_4",
+        "locationName": "Canal Yard",
+        "memberName": "Jammie Beahan"
+      },
+      {
+        "id": "bk_le",
+        "roomId": "room_m",
+        "memberId": "mem_25",
+        "startsAt": "2026-10-14T11:30:00.000Z",
+        "endsAt": "2026-10-14T13:30:00.000Z",
+        "attendees": 2,
+        "status": "pending",
+        "notes": null,
+        "totalPrice": 5400,
+        "createdAt": "2026-10-08T11:30:00.000Z",
+        "roomName": "Iris",
+        "locationId": "loc_3",
+        "locationName": "Old Mill Works",
+        "memberName": "Sasha Herzog"
+      },
+      {
+        "id": "bk_lc",
+        "roomId": "room_h",
+        "memberId": "mem_1q",
+        "startsAt": "2026-10-14T12:00:00.000Z",
+        "endsAt": "2026-10-14T15:00:00.000Z",
+        "attendees": 2,
+        "status": "confirmed",
+        "notes": null,
+        "totalPrice": 7950,
+        "createdAt": "2026-10-03T12:00:00.000Z",
+        "roomName": "Juniper",
+        "locationId": "loc_2",
+        "locationName": "Market Square Loft",
+        "memberName": "Liana Metz"
+      },
+      {
+        "id": "bk_l0",
+        "roomId": "room_6",
+        "memberId": "mem_1s",
+        "startsAt": "2026-10-14T13:00:00.000Z",
+        "endsAt": "2026-10-14T15:00:00.000Z",
+        "attendees": 6,
+        "status": "confirmed",
+        "notes": null,
+        "totalPrice": 1300,
+        "createdAt": "2026-10-04T13:00:00.000Z",
+        "roomName": "Granite",
+        "locationId": "loc_1",
+        "locationName": "Riverside Hub",
+        "memberName": "Marsha Bergnaum"
+      },
+      {
+        "id": "bk_l4",
+        "roomId": "room_a",
+        "memberId": "mem_1j",
+        "startsAt": "2026-10-14T14:00:00.000Z",
+        "endsAt": "2026-10-14T16:00:00.000Z",
+        "attendees": 1,
+        "status": "confirmed",
+        "notes": null,
+        "totalPrice": 3100,
+        "createdAt": "2026-10-02T14:00:00.000Z",
+        "roomName": "Lumen",
+        "locationId": "loc_1",
+        "locationName": "Riverside Hub",
+        "memberName": "Johathan Davis"
+      }
+    ]
+  },
+  "errors": {
+    "20261014": {
+      "status": 422,
+      "body": {
+        "message": "Validation failed",
+        "fieldErrors": {
+          "date": "Invalid ISO date"
+        }
+      }
+    },
+    "2026-13-01": {
+      "status": 422,
+      "body": {
+        "message": "Validation failed",
+        "fieldErrors": {
+          "date": "Invalid ISO date"
+        }
+      }
+    },
+    "abc": {
+      "status": 422,
+      "body": {
+        "message": "Validation failed",
+        "fieldErrors": {
+          "date": "Invalid ISO date"
+        }
+      }
+    },
+    "2026-02-30": {
+      "status": 422,
+      "body": {
+        "message": "Validation failed",
+        "fieldErrors": {
+          "date": "Invalid ISO date"
+        }
+      }
+    },
+    "2026-1-1": {
+      "status": 422,
+      "body": {
+        "message": "Validation failed",
+        "fieldErrors": {
+          "date": "Invalid ISO date"
+        }
+      }
+    },
+    "2026-10-14T00:00:00Z": {
+      "status": 422,
+      "body": {
+        "message": "Validation failed",
+        "fieldErrors": {
+          "date": "Invalid ISO date"
+        }
+      }
+    }
+  }
+}
