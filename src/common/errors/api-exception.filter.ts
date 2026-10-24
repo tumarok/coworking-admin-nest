@@ -8,9 +8,7 @@ import {
 } from '@nestjs/common';
 import type { Request, Response } from 'express';
 import type { ApiErrorBody } from '../../contract/index.js';
-import { API_PREFIX } from '../http/api-prefix.js';
-
-const PREFIX = `/${API_PREFIX}`;
+import { noRouteBody } from './no-route.js';
 
 const isApiErrorBody = (value: unknown): value is ApiErrorBody =>
   typeof value === 'object' &&
@@ -41,12 +39,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
     // Nest raises NotFoundException for a request that matched no route; other failures on such
     // a request (a decoding error, say) must not hide behind "No route for".
     if (!request.route && exception instanceof NotFoundException) {
-      const body = request.path.startsWith(PREFIX)
-        ? {
-            message: `No route for ${request.method} ${request.path.slice(PREFIX.length) || '/'}`,
-          }
-        : { message: 'Not found' };
-      response.status(404).json(body);
+      response.status(404).json(noRouteBody(request));
       return;
     }
 

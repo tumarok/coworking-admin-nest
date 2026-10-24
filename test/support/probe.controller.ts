@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, HttpCode, Param, Patch, Post, Query } from '@nestjs/common';
+import { Public } from '../../src/common/auth/public.decorator.js';
 import { notFound, conflict } from '../../src/common/errors/api-error.js';
 import { parseInput } from '../../src/common/validation/parse-input.js';
 import {
@@ -7,7 +8,11 @@ import {
   type LocationInput,
 } from '../../src/contract/index.js';
 
-/** Routes that exercise the transport rules (body, query, errors) without any business module. */
+/**
+ * Routes that exercise the transport rules (body, query, errors) without any business module.
+ * Public, so the transport tests need no token; `ProtectedProbeController` is the guarded route.
+ */
+@Public()
 @Controller('probe')
 export class ProbeController {
   @Post('echo')
@@ -50,5 +55,14 @@ export class ProbeController {
   @Get('boom')
   boom() {
     throw new Error('database password is hunter2');
+  }
+}
+
+/** A route behind the global guard, to show that routes are protected unless marked public. */
+@Controller('probe-protected')
+export class ProtectedProbeController {
+  @Get()
+  read() {
+    return { ok: true };
   }
 }

@@ -3,7 +3,9 @@ import { Test } from '@nestjs/testing';
 import request from 'supertest';
 import type TestAgent from 'supertest/lib/agent.js';
 import { AppModule } from '../../src/app.module.js';
+import { Clock } from '../../src/common/clock/clock.js';
 import { configureApp, createHttpAdapter } from '../../src/configure-app.js';
+import { FixedClock } from './fixed-clock.js';
 import { probeImports } from './probe.module.js';
 
 export interface TestApp {
@@ -32,12 +34,20 @@ export const withEnv = async <T>(
   }
 };
 
+export interface TestAppOptions {
+  /** Freezes the application's clock at this instant; the system clock when absent. */
+  now?: Date;
+}
+
 /** The whole application with the probe routes, configured like `main.ts` does. */
-export const testApp = async (env: Record<string, string | undefined> = {}): Promise<TestApp> =>
+export const testApp = async (
+  env: Record<string, string | undefined> = {},
+  { now }: TestAppOptions = {},
+): Promise<TestApp> =>
   withEnv(env, async () => {
-    const moduleRef = await Test.createTestingModule({
-      imports: [AppModule, ...probeImports],
-    }).compile();
+    const builder = Test.createTestingModule({ imports: [AppModule, ...probeImports] });
+    if (now) builder.overrideProvider(Clock).useValue(new FixedClock(now));
+    const moduleRef = await builder.compile();
     const app = moduleRef.createNestApplication<NestExpressApplication>(createHttpAdapter(), {
       bodyParser: false,
       logger: false,

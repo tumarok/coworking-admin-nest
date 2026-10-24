@@ -1,5 +1,6 @@
 import swc from 'unplugin-swc';
 import { defineConfig } from 'vitest/config';
+import { TEST_JWT_SECRET } from './test/support/constants.js';
 
 // esbuild does not emit decorator metadata, which Nest needs for constructor injection, so SWC
 // compiles the TypeScript.
@@ -17,7 +18,7 @@ const plugins = [
 // The environment every test starts from; a test changes single values with `withEnv`.
 const env = {
   DATABASE_URL: 'postgresql://postgres:postgres@127.0.0.1:5433/coworking_test',
-  JWT_SECRET: 'test-secret-test-secret-test-secret',
+  JWT_SECRET: TEST_JWT_SECRET,
   ENABLE_RESET: 'false',
   CORS_ORIGINS: '',
 };
