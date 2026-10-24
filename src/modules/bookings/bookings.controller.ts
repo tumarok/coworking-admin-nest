@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Patch, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Patch, Post, Query } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ApiRoute } from '../../common/openapi/api-route.js';
 import {
@@ -8,6 +8,11 @@ import {
   bookingListQuerySchema,
   bookingPageSchema,
   bookingSchema,
+  bookingStatusChangeSchema,
+  type BulkBookingRequest,
+  type BulkBookingResult,
+  bulkBookingRequestSchema,
+  bulkBookingResultSchema,
   type Page,
 } from '../../contract/index.js';
 import { BookingsService } from './bookings.service.js';
@@ -62,5 +67,32 @@ export class BookingsController {
   })
   update(@Param('id') id: string, @Body() body: unknown): Promise<Booking> {
     return this.bookings.update(id, body);
+  }
+
+  @Post('bulk')
+  @HttpCode(200)
+  @ApiRoute({
+    summary:
+      'Confirm or cancel several bookings; each is judged on its own and the answer is always 200',
+    success: { status: 200, schema: bulkBookingResultSchema },
+    failures: [422],
+  })
+  bulk(
+    @Body({ schema: bulkBookingRequestSchema }) body: BulkBookingRequest,
+  ): Promise<BulkBookingResult> {
+    return this.bookings.bulk(body);
+  }
+
+  // The body is not validated by a pipe: an unknown id must be 404 before an invalid body is 422.
+  @Post(':id/status')
+  @HttpCode(200)
+  @ApiRoute({
+    summary: 'Move a booking to another status along the allowed transitions',
+    success: { status: 200, schema: bookingSchema },
+    body: bookingStatusChangeSchema,
+    failures: [404, 409, 422],
+  })
+  changeStatus(@Param('id') id: string, @Body() body: unknown): Promise<Booking> {
+    return this.bookings.changeStatus(id, body);
   }
 }

@@ -11,13 +11,14 @@ const lockWaiting = async (prisma: PrismaService) => {
 
 /**
  * Sends `request` while `hold` has uncommitted writes, and ends the transaction (commit, or
- * rollback with `commit: false`) once the request waits for them. Returns the response.
+ * rollback with `commit: false`) once the request waits for them; `whileQueued` runs just before,
+ * to look at what the waiting request holds. Returns the response.
  */
 export const queuedBehind = async (
   prisma: PrismaService,
   hold: (tx: DbClient) => Promise<void>,
   request: () => PromiseLike<Response>,
-  { commit = true }: { commit?: boolean } = {},
+  { commit = true, whileQueued }: { commit?: boolean; whileQueued?: () => Promise<void> } = {},
 ): Promise<Response> => {
   let queued: Promise<Response> | undefined;
   class Rollback extends Error {}
@@ -30,6 +31,7 @@ export const queuedBehind = async (
         await new Promise((resolve) => setTimeout(resolve, 50));
       }
       expect(await lockWaiting(prisma)).toBe(true);
+      await whileQueued?.();
       if (!commit) throw new Rollback();
     });
   } catch (error) {

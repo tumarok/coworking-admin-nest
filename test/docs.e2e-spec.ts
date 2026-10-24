@@ -67,6 +67,8 @@ describe('API documentation', () => {
           'Booking',
           'BookingInput',
           'BookingPage',
+          'BulkBookingRequest',
+          'BulkBookingResult',
           'Location',
           'LocationInput',
           'LocationPage',
@@ -174,6 +176,8 @@ describe('API documentation', () => {
 
       expect(Object.keys(paths['/api/v1/bookings'] ?? {})).toEqual(['get', 'post']);
       expect(Object.keys(paths['/api/v1/bookings/{id}'] ?? {})).toEqual(['get', 'patch']);
+      expect(Object.keys(paths['/api/v1/bookings/bulk'] ?? {})).toEqual(['post']);
+      expect(Object.keys(paths['/api/v1/bookings/{id}/status'] ?? {})).toEqual(['post']);
       expect(Object.keys(responses('/api/v1/bookings', 'get'))).toEqual(['200', '401', '422']);
       expect(Object.keys(responses('/api/v1/bookings', 'post'))).toEqual([
         '201',
@@ -192,6 +196,38 @@ describe('API documentation', () => {
       expect(responses('/api/v1/bookings', 'post')['201']).toContain(
         '#/components/schemas/Booking',
       );
+      expect(Object.keys(responses('/api/v1/bookings/bulk', 'post'))).toEqual([
+        '200',
+        '401',
+        '422',
+      ]);
+      expect(Object.keys(responses('/api/v1/bookings/{id}/status', 'post'))).toEqual([
+        '200',
+        '401',
+        '404',
+        '409',
+        '422',
+      ]);
+      expect(responses('/api/v1/bookings/bulk', 'post')['200']).toContain(
+        '#/components/schemas/BulkBookingResult',
+      );
+      expect(responses('/api/v1/bookings/{id}/status', 'post')['200']).toContain(
+        '#/components/schemas/Booking',
+      );
+    });
+
+    it('describes the body of a booking status change, which a pipe does not validate', () => {
+      const body = document().paths['/api/v1/bookings/{id}/status'].post?.requestBody;
+      const schema =
+        body && 'content' in body ? body.content['application/json'].schema : undefined;
+
+      expect(schema).toMatchObject({ type: 'object', required: ['status'] });
+    });
+
+    it('describes the body of a bulk request by its component', () => {
+      const body = document().paths['/api/v1/bookings/bulk'].post?.requestBody;
+
+      expect(JSON.stringify(body)).toContain('#/components/schemas/BulkBookingRequest');
     });
 
     it('lists the query of the bookings list', () => {

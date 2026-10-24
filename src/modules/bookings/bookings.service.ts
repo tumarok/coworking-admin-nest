@@ -9,11 +9,15 @@ import {
   type BookingInput,
   bookingInputSchema,
   type BookingStatus,
+  bookingStatusChangeSchema,
+  type BulkBookingRequest,
+  type BulkBookingResult,
   type Page,
 } from '../../contract/index.js';
 import { type BookingRow, BookingsRepository, type BookingStore } from './bookings.repository.js';
 import type { BookingListParams } from './bookings.types.js';
 import { bookingPrice, bookingProblems, isEditable } from './domain/rules.js';
+import { BULK_TARGETS, changeRefusal, planBulk } from './domain/transitions.js';
 
 const OVERLAP_MESSAGE = 'The room is already booked for this time';
 
@@ -68,6 +72,39 @@ export class BookingsService {
       return store.reread(id);
     });
     return result === 'overlap' ? this.refuse(input, id) : result;
+  }
+
+  /**
+   * The order of the answers is the mock's: unknown id (404), the body (422) and a move the table
+   * does not allow (409). Nothing else is checked: a status change takes no room or time rules.
+   */
+  async changeStatus(id: string, body: unknown): Promise<Booking> {
+    await this.get(id);
+    const { status } = parseInput(bookingStatusChangeSchema, body);
+    return this.repository.inTransaction(async (store) => {
+      // The booking is locked first and its status read after the lock, so that of two requests
+      // for the same move only the first one finds the status it needs.
+      const current = await store.lockBooking(id);
+      if (current === undefined) throw notFound('Booking');
+      const refusal = changeRefusal(current, status);
+      if (refusal) throw conflict(refusal);
+
+      await store.setStatus([id], status);
+      return store.reread(id);
+    });
+  }
+
+  /**
+   * Confirms or cancels each booking named, in the order of the request, and answers 200 whatever
+   * happens to them. The bookings are locked together, in one order, and their results commit
+   * together, though each id is judged on its own as in the mock.
+   */
+  async bulk({ ids, action }: BulkBookingRequest): Promise<BulkBookingResult> {
+    return this.repository.inTransaction(async (store) => {
+      const plan = planBulk(ids, action, await store.lockBookings(ids));
+      if (plan.updated.length > 0) await store.setStatus(plan.updated, BULK_TARGETS[action]);
+      return plan;
+    });
   }
 
   /**

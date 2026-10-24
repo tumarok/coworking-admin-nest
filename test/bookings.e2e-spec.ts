@@ -1,6 +1,14 @@
 import { Clock } from '../src/common/clock/clock.js';
 import { sequenceOf } from '../src/common/ids/ids.js';
-import { type Booking, bookingPageSchema, bookingSchema } from '../src/contract/index.js';
+import {
+  BOOKING_STATUSES,
+  BOOKING_TRANSITIONS,
+  type Booking,
+  bookingPageSchema,
+  bookingSchema,
+  bulkBookingResultSchema,
+  MAX_BULK_BOOKINGS,
+} from '../src/contract/index.js';
 import { nextEntityId } from '../src/database/entity-id.js';
 import { type DbClient, PrismaService } from '../src/database/prisma.service.js';
 import { generateSeed } from '../src/database/seed/generate-seed.js';
@@ -98,6 +106,8 @@ describe('bookings (read)', () => {
       ['GET', `${BASE}/bk_3a`],
       ['POST', BASE],
       ['PATCH', `${BASE}/bk_3a`],
+      ['POST', `${BASE}/bk_3a/status`],
+      ['POST', `${BASE}/bulk`],
     ] as const)('answers %s %s with 401 without a token', async (method, path) => {
       const { status, body } = await api.http[method.toLowerCase() as 'get'](path);
 
@@ -1105,6 +1115,469 @@ describe('bookings (write)', () => {
     });
   });
 
+  describe('POST /bookings/:id/status', () => {
+    const change = (id: string, status: unknown) =>
+      api.http.post(`${BASE}/${id}/status`).set(auth).send({ status });
+    /** A booking in its own room, moved straight to `status` in the table. */
+    const inStatus = async (status: BookingStatus) => {
+      const booking = await create(draft(await newRoom()));
+      await setStatus(booking.id, status);
+      return { ...booking, status };
+    };
+
+    it.each(BOOKING_STATUSES.flatMap((from) => BOOKING_STATUSES.map((to) => [from, to] as const)))(
+      'from %s to %s follows the table of transitions',
+      async (from, to) => {
+        const booking = await inStatus(from);
+
+        const { status, body } = await change(booking.id, to);
+
+        if (BOOKING_TRANSITIONS[from].includes(to)) {
+          expect(status).toBe(200);
+          expect(expectContract(bookingSchema, body)).toEqual({ ...booking, status: to });
+        } else {
+          expect(status).toBe(409);
+          expect(body).toEqual({
+            message: `Cannot change status from ${from.replace('_', ' ')} to ${to.replace('_', ' ')}`,
+          });
+        }
+        const stored = (await get(booking.id)).body as Booking;
+        expect(stored.status).toBe(BOOKING_TRANSITIONS[from].includes(to) ? to : from);
+      },
+    );
+
+    it.each([
+      ['pending', 'confirmed'],
+      ['pending', 'cancelled'],
+      ['confirmed', 'checked_in'],
+      ['confirmed', 'cancelled'],
+      ['confirmed', 'no_show'],
+      ['checked_in', 'completed'],
+    ] as const)('moves a %s booking to %s with 200 and the whole booking', async (from, to) => {
+      const booking = await inStatus(from);
+
+      const { status, body } = await change(booking.id, to);
+
+      expect(status).toBe(200);
+      expect(expectContract(bookingSchema, body)).toEqual({ ...booking, status: to });
+      expect((await get(booking.id)).body).toEqual({ ...booking, status: to });
+    });
+
+    it.each([
+      ['completed', 'pending', 'Cannot change status from completed to pending'],
+      ['checked_in', 'pending', 'Cannot change status from checked in to pending'],
+      ['checked_in', 'cancelled', 'Cannot change status from checked in to cancelled'],
+      ['no_show', 'checked_in', 'Cannot change status from no show to checked in'],
+      ['cancelled', 'confirmed', 'Cannot change status from cancelled to confirmed'],
+      ['pending', 'pending', 'Cannot change status from pending to pending'],
+      ['pending', 'checked_in', 'Cannot change status from pending to checked in'],
+    ] as const)('refuses %s to %s with 409 "%s"', async (from, to, message) => {
+      const booking = await inStatus(from);
+
+      const { status, body } = await change(booking.id, to);
+
+      expect(status).toBe(409);
+      expect(body).toEqual({ message });
+      expect((await get(booking.id)).body).toEqual(booking);
+    });
+
+    it('walks a booking from pending to completed', async () => {
+      const { id } = await create(draft(await newRoom()));
+
+      for (const next of ['confirmed', 'checked_in', 'completed'] as const) {
+        const { status, body } = await change(id, next);
+        expect(status).toBe(200);
+        expect(expectContract(bookingSchema, body).status).toBe(next);
+      }
+      expect((await change(id, 'cancelled')).status).toBe(409);
+    });
+
+    it('applies no rule of the room, the member or the time, as the mock does', async () => {
+      const roomId = await newRoom();
+      const suspended = await newMember();
+      const booking = await create(draft(roomId, { memberId: suspended }));
+      await prisma.client.member.update({
+        where: { id: suspended },
+        data: { status: 'suspended' },
+      });
+      await prisma.client.room.update({ where: { id: roomId }, data: { status: 'maintenance' } });
+      await prisma.client.member.update({
+        where: { id: suspended },
+        data: { deletedAt: SEED_NOW },
+      });
+      await prisma.client.room.update({ where: { id: roomId }, data: { deletedAt: SEED_NOW } });
+
+      const { status, body } = await change(booking.id, 'confirmed');
+
+      expect(status).toBe(200);
+      expect(expectContract(bookingSchema, body)).toMatchObject({
+        status: 'confirmed',
+        roomName: '—',
+        memberName: '—',
+      });
+    });
+
+    it('frees the room when the booking is cancelled', async () => {
+      const roomId = await newRoom();
+      const booking = await create(draft(roomId));
+      expect((await post(draft(roomId))).status).toBe(409);
+
+      expect((await change(booking.id, 'cancelled')).status).toBe(200);
+
+      expect((await post(draft(roomId))).status).toBe(201);
+    });
+
+    it('answers 401 without a token', async () => {
+      const { status, body } = await api.http
+        .post(`${BASE}/bk_3a/status`)
+        .send({ status: 'confirmed' });
+
+      expect(status).toBe(401);
+      expect(body).toEqual({ message: 'Authentication required' });
+    });
+
+    it('answers 404 for an unknown id, even when the body is invalid', async () => {
+      for (const body of [{ status: 'confirmed' }, {}, { status: 'done' }]) {
+        const answer = await api.http.post(`${BASE}/bk_missing/status`).set(auth).send(body);
+
+        expect(answer.status).toBe(404);
+        expect(answer.body).toEqual({ message: 'Booking not found' });
+      }
+    });
+
+    it('answers 422 before 409 for an invalid body on a booking that is past changing', async () => {
+      const booking = await inStatus('completed');
+
+      const { status, body } = await change(booking.id, 'done');
+
+      expect(status).toBe(422);
+      expect(body.fieldErrors).toHaveProperty('status');
+    });
+
+    it.each([
+      [
+        'a missing status',
+        {},
+        {
+          status:
+            'Invalid option: expected one of "pending"|"confirmed"|"checked_in"|"completed"|"cancelled"|"no_show"',
+        },
+      ],
+      [
+        'an unknown status',
+        { status: 'done' },
+        {
+          status:
+            'Invalid option: expected one of "pending"|"confirmed"|"checked_in"|"completed"|"cancelled"|"no_show"',
+        },
+      ],
+      [
+        'a status of the wrong type',
+        { status: 5 },
+        {
+          status:
+            'Invalid option: expected one of "pending"|"confirmed"|"checked_in"|"completed"|"cancelled"|"no_show"',
+        },
+      ],
+      [
+        'a body that is not an object',
+        'confirmed',
+        { _: 'Invalid input: expected object, received string' },
+      ],
+      ['a null body', null, { _: 'Invalid input: expected object, received null' }],
+    ])(
+      'answers 422 with the exact field errors for %s and changes nothing',
+      async (_name, send, fieldErrors) => {
+        const booking = await inStatus('pending');
+
+        const { status, body } = await api.http
+          .post(`${BASE}/${booking.id}/status`)
+          .set(auth)
+          .set('Content-Type', 'application/json')
+          .send(JSON.stringify(send));
+
+        expect(status).toBe(422);
+        expect(body).toEqual({ message: 'Validation failed', fieldErrors });
+        expect((await get(booking.id)).body).toEqual(booking);
+      },
+    );
+
+    it('answers 422 when the body is not JSON', async () => {
+      const booking = await inStatus('pending');
+
+      const { status, body } = await api.http
+        .post(`${BASE}/${booking.id}/status`)
+        .set(auth)
+        .set('Content-Type', 'application/json')
+        .send('{"status":');
+
+      expect(status).toBe(422);
+      expect(body.fieldErrors).toEqual({
+        _: 'Invalid input: expected object, received undefined',
+      });
+    });
+
+    it('ignores the keys the contract does not know', async () => {
+      const booking = await inStatus('pending');
+
+      const { status, body } = await api.http
+        .post(`${BASE}/${booking.id}/status`)
+        .set(auth)
+        .send({ status: 'confirmed', id: 'bk_other', notes: 'changed' });
+
+      expect(status).toBe(200);
+      expect(expectContract(bookingSchema, body)).toEqual({ ...booking, status: 'confirmed' });
+    });
+
+    it('answers a trailing slash', async () => {
+      const booking = await inStatus('pending');
+
+      const { status } = await api.http
+        .post(`${BASE}/${booking.id}/status/`)
+        .set(auth)
+        .send({ status: 'confirmed' });
+
+      expect(status).toBe(200);
+    });
+  });
+
+  describe('POST /bookings/bulk', () => {
+    const bulk = (ids: unknown, action: unknown = 'confirm') =>
+      api.http.post(`${BASE}/bulk`).set(auth).send({ ids, action });
+    const result = async (ids: string[], action: 'confirm' | 'cancel' = 'confirm') => {
+      const { status, body } = await bulk(ids, action);
+      expect(status).toBe(200);
+      return expectContract(bulkBookingResultSchema, body);
+    };
+    const statusOf = async (id: string) => ((await get(id)).body as Booking).status;
+    /** Bookings in one room, an hour each, moved straight to the given statuses. */
+    const made = async (statuses: BookingStatus[]) => {
+      const roomId = await newRoom();
+      const ids: string[] = [];
+      for (const [index, status] of statuses.entries()) {
+        const hour = String(6 + index).padStart(2, '0');
+        const booking = await create(
+          draft(roomId, slot(`${hour}:00`, `${String(7 + index).padStart(2, '0')}:00`)),
+        );
+        await setStatus(booking.id, status);
+        ids.push(booking.id);
+      }
+      return ids;
+    };
+
+    it.each([
+      ['confirm', 'pending', 'confirmed'],
+      ['confirm', 'confirmed', undefined],
+      ['confirm', 'checked_in', undefined],
+      ['confirm', 'completed', undefined],
+      ['confirm', 'cancelled', undefined],
+      ['confirm', 'no_show', undefined],
+      ['cancel', 'pending', 'cancelled'],
+      ['cancel', 'confirmed', 'cancelled'],
+      ['cancel', 'checked_in', undefined],
+      ['cancel', 'completed', undefined],
+      ['cancel', 'cancelled', undefined],
+      ['cancel', 'no_show', undefined],
+    ] as const)('%s on a %s booking moves it to %s', async (action, from, to) => {
+      const [id] = await made([from]);
+
+      const answer = await result([id], action);
+
+      if (to) {
+        expect(answer).toEqual({ updated: [id], failed: [] });
+        expect(await statusOf(id)).toBe(to);
+      } else {
+        expect(answer).toEqual({
+          updated: [],
+          failed: [{ id, reason: `Cannot ${action} a booking that is ${from.replace('_', ' ')}` }],
+        });
+        expect(await statusOf(id)).toBe(from);
+      }
+    });
+
+    it('confirms a pending booking and refuses a completed one, as the mock does', async () => {
+      const [pending, completed] = await made(['pending', 'completed']);
+
+      expect(await result([pending, completed])).toEqual({
+        updated: [pending],
+        failed: [{ id: completed, reason: 'Cannot confirm a booking that is completed' }],
+      });
+    });
+
+    it('answers a missing id and a checked in booking with their reasons', async () => {
+      const [pending, confirmed, checkedIn] = await made(['pending', 'confirmed', 'checked_in']);
+
+      expect(await result([pending, confirmed, 'bk_missing', checkedIn])).toEqual({
+        updated: [pending],
+        failed: [
+          { id: confirmed, reason: 'Cannot confirm a booking that is confirmed' },
+          { id: 'bk_missing', reason: 'Booking not found' },
+          { id: checkedIn, reason: 'Cannot confirm a booking that is checked in' },
+        ],
+      });
+    });
+
+    it('keeps the order of the request in both lists', async () => {
+      const ids = await made(['pending', 'completed', 'pending', 'cancelled', 'pending']);
+      const [a, b, c, d, e] = ids;
+
+      const answer = await result([e, d, 'bk_missing', c, b, a]);
+
+      expect(answer.updated).toEqual([e, c, a]);
+      expect(answer.failed.map((failure) => failure.id)).toEqual([d, 'bk_missing', b]);
+    });
+
+    it('lets the later copies of a repeated id fail, as the mock does', async () => {
+      const [pending, confirmed] = await made(['pending', 'confirmed']);
+
+      expect(await result([pending, pending, confirmed, pending])).toEqual({
+        updated: [pending],
+        failed: [
+          { id: pending, reason: 'Cannot confirm a booking that is confirmed' },
+          { id: confirmed, reason: 'Cannot confirm a booking that is confirmed' },
+          { id: pending, reason: 'Cannot confirm a booking that is confirmed' },
+        ],
+      });
+      expect(await result([confirmed, confirmed], 'cancel')).toEqual({
+        updated: [confirmed],
+        failed: [{ id: confirmed, reason: 'Cannot cancel a booking that is cancelled' }],
+      });
+    });
+
+    it('repeats the reason of a missing id for each copy', async () => {
+      expect(await result(['bk_missing', 'bk_missing'], 'cancel')).toEqual({
+        updated: [],
+        failed: [
+          { id: 'bk_missing', reason: 'Booking not found' },
+          { id: 'bk_missing', reason: 'Booking not found' },
+        ],
+      });
+    });
+
+    it('applies the ones that can move although others fail, and changes nothing else', async () => {
+      const [pending, completed, confirmed] = await made(['pending', 'completed', 'confirmed']);
+      const before = (await get(pending)).body as Booking;
+
+      await result([completed, pending, 'bk_missing', confirmed], 'cancel');
+
+      expect(await statusOf(pending)).toBe('cancelled');
+      expect(await statusOf(confirmed)).toBe('cancelled');
+      expect(await statusOf(completed)).toBe('completed');
+      expect((await get(pending)).body).toEqual({ ...before, status: 'cancelled' });
+    });
+
+    it('is the answer of every request that is valid, whatever happens to the bookings', async () => {
+      expect(await result(['bk_missing'])).toEqual({
+        updated: [],
+        failed: [{ id: 'bk_missing', reason: 'Booking not found' }],
+      });
+    });
+
+    it('accepts as many ids as the contract allows', async () => {
+      const ids = Array.from({ length: MAX_BULK_BOOKINGS }, (_, index) => `bk_none${index}`);
+
+      const answer = await result(ids);
+
+      expect(answer.updated).toEqual([]);
+      expect(answer.failed.map((failure) => failure.id)).toEqual(ids);
+    });
+
+    it('answers 401 without a token', async () => {
+      const { status, body } = await api.http
+        .post(`${BASE}/bulk`)
+        .send({ ids: ['bk_3a'], action: 'confirm' });
+
+      expect(status).toBe(401);
+      expect(body).toEqual({ message: 'Authentication required' });
+    });
+
+    it('answers 422 for no ids', async () => {
+      const { status, body } = await bulk([]);
+
+      expect(status).toBe(422);
+      expect(body).toEqual({
+        message: 'Validation failed',
+        fieldErrors: { ids: 'Too small: expected array to have >=1 items' },
+      });
+    });
+
+    it('answers 422 for more ids than the contract allows, and changes nothing', async () => {
+      const [id] = await made(['pending']);
+      const ids = [
+        id,
+        ...Array.from({ length: MAX_BULK_BOOKINGS }, (_, index) => `bk_none${index}`),
+      ];
+
+      const { status, body } = await bulk(ids);
+
+      expect(status).toBe(422);
+      expect(body).toEqual({
+        message: 'Validation failed',
+        fieldErrors: { ids: `Too big: expected array to have <=${MAX_BULK_BOOKINGS} items` },
+      });
+      expect(await statusOf(id)).toBe('pending');
+    });
+
+    it('answers 422 with a message for every field an empty-handed request misses', async () => {
+      const { status, body } = await api.http.post(`${BASE}/bulk`).set(auth).send({});
+
+      expect(status).toBe(422);
+      expect(body).toEqual({
+        message: 'Validation failed',
+        fieldErrors: {
+          ids: 'Invalid input: expected array, received undefined',
+          action: expect.stringContaining('Invalid option: expected one of "confirm"|"cancel"'),
+        },
+      });
+    });
+
+    it.each([
+      ['an unknown action', ['bk_1'], 'delete', 'action'],
+      ['an action of the wrong type', ['bk_1'], 5, 'action'],
+      ['an empty id', [''], 'confirm', 'ids.0'],
+      ['an id that is not text', ['bk_1', 7], 'confirm', 'ids.1'],
+      ['ids that are not a list', 'bk_1', 'confirm', 'ids'],
+    ])('answers 422 for %s', async (_name, ids, action, key) => {
+      const { status, body } = await bulk(ids, action);
+
+      expect(status).toBe(422);
+      expect(Object.keys(body.fieldErrors as object)).toEqual([key]);
+    });
+
+    it('answers 422 when the body is not JSON', async () => {
+      const { status, body } = await api.http
+        .post(`${BASE}/bulk`)
+        .set(auth)
+        .set('Content-Type', 'application/json')
+        .send('{"ids":');
+
+      expect(status).toBe(422);
+      expect(body.fieldErrors).toEqual({
+        _: 'Invalid input: expected object, received undefined',
+      });
+    });
+
+    it('ignores the keys the contract does not know', async () => {
+      const [id] = await made(['pending']);
+
+      const { status, body } = await api.http
+        .post(`${BASE}/bulk`)
+        .set(auth)
+        .send({ ids: [id], action: 'confirm', status: 'cancelled' });
+
+      expect(status).toBe(200);
+      expect(expectContract(bulkBookingResultSchema, body)).toEqual({ updated: [id], failed: [] });
+      expect(await statusOf(id)).toBe('confirmed');
+    });
+
+    it('is not an id: a GET of it answers 404 as the mock does', async () => {
+      const { status, body } = await get('bulk');
+
+      expect(status).toBe(404);
+      expect(body).toEqual({ message: 'Booking not found' });
+    });
+  });
+
   describe('the rule against overlapping bookings in the database', () => {
     it('refuses a second booking that occupies the room at the same time', async () => {
       const roomId = await newRoom();
@@ -1334,6 +1807,223 @@ describe('bookings (write)', () => {
       );
 
       expect(answer.status).toBe(409);
+    });
+  });
+
+  describe('status changes that race', () => {
+    const change = (id: string, status: BookingStatus) =>
+      api.http.post(`${BASE}/${id}/status`).set(auth).send({ status });
+    const bulk = (ids: string[], action: 'confirm' | 'cancel') =>
+      api.http.post(`${BASE}/bulk`).set(auth).send({ ids, action });
+    const lock = (tx: DbClient, id: string) =>
+      tx.$queryRaw`SELECT id FROM bookings WHERE id = ${id} FOR UPDATE`;
+    const statusOf = async (id: string) => ((await get(id)).body as Booking).status;
+
+    it('lets one of two parallel requests for the same move win', async () => {
+      const { id } = await create(draft(await newRoom()));
+
+      const answers = await Promise.all([change(id, 'confirmed'), change(id, 'confirmed')]);
+
+      expect(answers.map((answer) => answer.status).sort()).toEqual([200, 409]);
+      expect(answers.find((answer) => answer.status === 409)?.body).toEqual({
+        message: 'Cannot change status from confirmed to confirmed',
+      });
+      expect(await statusOf(id)).toBe('confirmed');
+    });
+
+    it('lets only one of two moves that exclude each other win', async () => {
+      const { id } = await create(draft(await newRoom()));
+      await setStatus(id, 'confirmed');
+
+      const answers = await Promise.all([change(id, 'checked_in'), change(id, 'cancelled')]);
+
+      expect(answers.map((answer) => answer.status).sort()).toEqual([200, 409]);
+      const winner = answers.find((answer) => answer.status === 200);
+      expect(expectContract(bookingSchema, winner?.body).status).toBe(await statusOf(id));
+      expect(answers.find((answer) => answer.status === 409)?.body.message).toMatch(
+        /^Cannot change status from (checked in|cancelled) to (cancelled|checked in)$/,
+      );
+    });
+
+    it('judges a move by the status the booking has once the lock is free', async () => {
+      const { id } = await create(draft(await newRoom()));
+
+      const answer = await queuedBehind(
+        prisma,
+        async (tx) => {
+          await lock(tx, id);
+          await tx.booking.update({ where: { id }, data: { status: 'cancelled' } });
+        },
+        () => change(id, 'confirmed'),
+      );
+
+      expect(answer.status).toBe(409);
+      expect(answer.body).toEqual({ message: 'Cannot change status from cancelled to confirmed' });
+      expect(await statusOf(id)).toBe('cancelled');
+    });
+
+    it('moves the booking when the transaction that held it is rolled back', async () => {
+      const { id } = await create(draft(await newRoom()));
+
+      const answer = await queuedBehind(
+        prisma,
+        async (tx) => {
+          await lock(tx, id);
+          await tx.booking.update({ where: { id }, data: { status: 'cancelled' } });
+        },
+        () => change(id, 'confirmed'),
+        { commit: false },
+      );
+
+      expect(answer.status).toBe(200);
+      expect(expectContract(bookingSchema, answer.body).status).toBe('confirmed');
+    });
+
+    it('returns the fields an edit changed while the move waited for it', async () => {
+      const roomId = await newRoom();
+      const { id } = await create(draft(roomId));
+
+      const answer = await queuedBehind(
+        prisma,
+        async (tx) => {
+          await lock(tx, id);
+          await tx.booking.update({ where: { id }, data: { attendees: 2, notes: 'edited' } });
+        },
+        () => change(id, 'confirmed'),
+      );
+
+      expect(answer.status).toBe(200);
+      expect(expectContract(bookingSchema, answer.body)).toMatchObject({
+        status: 'confirmed',
+        attendees: 2,
+        notes: 'edited',
+      });
+    });
+
+    it('answers 409 to an edit of a booking whose status was changed meanwhile', async () => {
+      const roomId = await newRoom();
+      const { id } = await create(draft(roomId));
+
+      const answer = await queuedBehind(
+        prisma,
+        async (tx) => {
+          await lock(tx, id);
+          await tx.booking.update({ where: { id }, data: { status: 'cancelled' } });
+        },
+        () => patch(id, draft(roomId, { attendees: 2 })),
+      );
+
+      expect(answer.status).toBe(409);
+      expect(answer.body).toEqual({ message: NOT_EDITABLE });
+    });
+
+    it('lets an edit and a move race without losing either', async () => {
+      const roomId = await newRoom();
+      const { id } = await create(draft(roomId));
+
+      const answers = await Promise.all([
+        patch(id, draft(roomId, { attendees: 2 })),
+        change(id, 'confirmed'),
+      ]);
+
+      expect(answers.map((answer) => answer.status)).toEqual([200, 200]);
+      expect((await get(id)).body).toMatchObject({ status: 'confirmed', attendees: 2 });
+    });
+
+    it('judges a bulk request by the statuses once the locks are free', async () => {
+      const first = await create(draft(await newRoom()));
+      const second = await create(draft(await newRoom()));
+
+      const answer = await queuedBehind(
+        prisma,
+        async (tx) => {
+          await lock(tx, second.id);
+          await tx.booking.update({ where: { id: second.id }, data: { status: 'cancelled' } });
+        },
+        () => bulk([first.id, second.id], 'confirm'),
+      );
+
+      expect(answer.status).toBe(200);
+      expect(expectContract(bulkBookingResultSchema, answer.body)).toEqual({
+        updated: [first.id],
+        failed: [{ id: second.id, reason: 'Cannot confirm a booking that is cancelled' }],
+      });
+    });
+
+    it('waits for a booking that another transaction holds and then moves them all', async () => {
+      const first = await create(draft(await newRoom()));
+      const second = await create(draft(await newRoom()));
+
+      const answer = await queuedBehind(
+        prisma,
+        (tx) => lock(tx, second.id).then(() => undefined),
+        () => bulk([first.id, second.id], 'cancel'),
+      );
+
+      expect(answer.body).toEqual({ updated: [first.id, second.id], failed: [] });
+      expect(await statusOf(first.id)).toBe('cancelled');
+      expect(await statusOf(second.id)).toBe('cancelled');
+    });
+
+    it('locks the bookings in the order they were made, whatever the order of the request', async () => {
+      const low = await create(draft(await newRoom()));
+      const high = await create(draft(await newRoom()));
+      let lowIsHeld = false;
+
+      const answer = await queuedBehind(
+        prisma,
+        (tx) => lock(tx, high.id).then(() => undefined),
+        () => bulk([high.id, low.id], 'confirm'),
+        {
+          // The request waits for `high`, so it must already hold `low`, which has the lower seq.
+          whileQueued: async () => {
+            await prisma.client
+              .$transaction(
+                (tx) =>
+                  tx.$queryRaw`SELECT id FROM bookings WHERE id = ${low.id} FOR UPDATE NOWAIT`,
+              )
+              .catch(() => {
+                lowIsHeld = true;
+              });
+          },
+        },
+      );
+
+      expect(lowIsHeld).toBe(true);
+      expect(answer.body).toEqual({ updated: [high.id, low.id], failed: [] });
+    });
+
+    it('lets two bulk requests that name the same bookings in opposite order both finish', async () => {
+      const room = await newRoom();
+      const ids: string[] = [];
+      for (let hour = 6; hour < 14; hour += 1) {
+        const from = `${String(hour).padStart(2, '0')}:00`;
+        const to = `${String(hour + 1).padStart(2, '0')}:00`;
+        ids.push((await create(draft(room, slot(from, to)))).id);
+      }
+
+      const answers = await Promise.all([
+        bulk(ids, 'confirm'),
+        bulk([...ids].reverse(), 'confirm'),
+      ]);
+
+      expect(answers.map((answer) => answer.status)).toEqual([200, 200]);
+      const [a, b] = answers.map((answer) => expectContract(bulkBookingResultSchema, answer.body));
+      expect([...a.updated, ...b.updated].sort()).toEqual([...ids].sort());
+      expect([...a.failed, ...b.failed]).toHaveLength(ids.length);
+      for (const id of ids) expect(await statusOf(id)).toBe('confirmed');
+    });
+
+    it('lets a bulk request and a single move race for one booking', async () => {
+      const { id } = await create(draft(await newRoom()));
+
+      const [single, many] = await Promise.all([change(id, 'confirmed'), bulk([id], 'confirm')]);
+
+      const bulked = expectContract(bulkBookingResultSchema, many.body);
+      expect([single.status, bulked.updated.length]).toSatisfy(
+        ([code, count]: number[]) => (code === 200 && count === 0) || (code === 409 && count === 1),
+      );
+      expect(await statusOf(id)).toBe('confirmed');
     });
   });
 });

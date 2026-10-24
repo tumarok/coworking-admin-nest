@@ -26,6 +26,8 @@ describe('BookingsService', () => {
   const store = (overrides: Partial<BookingStore> = {}) =>
     ({
       lockBooking: () => Promise.resolve('pending'),
+      lockBookings: () => Promise.resolve(new Map()),
+      setStatus: () => Promise.resolve(),
       lockRoom: () => Promise.resolve(room),
       lockMember: () => Promise.resolve({ status: 'active' }),
       conflicts: () => Promise.resolve([]),
@@ -44,6 +46,7 @@ describe('BookingsService', () => {
   ): Partial<BookingsRepository> => ({
     find: () => Promise.resolve(stored(status)),
     transaction: (work) => work(inside),
+    inTransaction: (work) => work(inside),
     ...outside,
   });
 
@@ -177,6 +180,118 @@ describe('BookingsService', () => {
 
       await expect(subject.update('bk_1', input)).rejects.toMatchObject({ status: 409 });
       expect(conflicts.mock.calls[0]?.[3]).toBe('bk_1');
+    });
+  });
+
+  describe('changeStatus answers in the order of the mock', () => {
+    it('404 for an unknown id, before the body is read', async () => {
+      const inTransaction = vi.fn();
+      const subject = service({ find: () => Promise.resolve(undefined), inTransaction });
+
+      await expect(subject.changeStatus('bk_missing', {})).rejects.toMatchObject({ status: 404 });
+      expect(inTransaction).not.toHaveBeenCalled();
+    });
+
+    it('422 for a body that fails the schema, before the transition is judged', async () => {
+      const inTransaction = vi.fn();
+      const subject = service({ ...repository('completed', store()), inTransaction });
+
+      await expect(subject.changeStatus('bk_1', { status: 'done' })).rejects.toMatchObject({
+        status: 422,
+        response: { fieldErrors: { status: expect.stringContaining('Invalid option') as string } },
+      });
+      expect(inTransaction).not.toHaveBeenCalled();
+    });
+
+    it('409 for a move the table forbids, and for staying where it is', async () => {
+      const setStatus = vi.fn();
+      const subject = service(
+        repository(
+          'completed',
+          store({ lockBooking: () => Promise.resolve('completed'), setStatus }),
+        ),
+      );
+
+      await expect(subject.changeStatus('bk_1', { status: 'pending' })).rejects.toMatchObject({
+        status: 409,
+        response: { message: 'Cannot change status from completed to pending' },
+      });
+      await expect(subject.changeStatus('bk_1', { status: 'completed' })).rejects.toMatchObject({
+        status: 409,
+      });
+      expect(setStatus).not.toHaveBeenCalled();
+    });
+
+    it('judges the status found after the lock, not the one found before', async () => {
+      const subject = service(
+        repository('pending', store({ lockBooking: () => Promise.resolve('cancelled') })),
+      );
+
+      await expect(subject.changeStatus('bk_1', { status: 'confirmed' })).rejects.toMatchObject({
+        status: 409,
+        response: { message: 'Cannot change status from cancelled to confirmed' },
+      });
+    });
+
+    it('404 when the booking is gone between the lookup and the lock', async () => {
+      const subject = service(
+        repository('pending', store({ lockBooking: () => Promise.resolve(undefined) })),
+      );
+
+      await expect(subject.changeStatus('bk_1', { status: 'confirmed' })).rejects.toMatchObject({
+        status: 404,
+      });
+    });
+
+    it('writes the status and returns the booking read back', async () => {
+      const setStatus = vi.fn().mockResolvedValue(undefined);
+      const subject = service(
+        repository(
+          'pending',
+          store({ setStatus, reread: () => Promise.resolve(stored('confirmed')) }),
+        ),
+      );
+
+      await expect(subject.changeStatus('bk_1', { status: 'confirmed' })).resolves.toEqual(
+        stored('confirmed'),
+      );
+      expect(setStatus).toHaveBeenCalledWith(['bk_1'], 'confirmed');
+    });
+  });
+
+  describe('bulk', () => {
+    it('writes the ones that moved to the target and reports the rest', async () => {
+      const lockBookings = vi.fn().mockResolvedValue(
+        new Map<string, BookingStatus>([
+          ['bk_1', 'pending'],
+          ['bk_2', 'completed'],
+        ]),
+      );
+      const setStatus = vi.fn().mockResolvedValue(undefined);
+      const subject = service(repository('pending', store({ lockBookings, setStatus })));
+
+      await expect(
+        subject.bulk({ ids: ['bk_2', 'bk_1', 'bk_x'], action: 'confirm' }),
+      ).resolves.toEqual({
+        updated: ['bk_1'],
+        failed: [
+          { id: 'bk_2', reason: 'Cannot confirm a booking that is completed' },
+          { id: 'bk_x', reason: 'Booking not found' },
+        ],
+      });
+      expect(lockBookings).toHaveBeenCalledWith(['bk_2', 'bk_1', 'bk_x']);
+      expect(setStatus).toHaveBeenCalledWith(['bk_1'], 'confirmed');
+    });
+
+    it('writes nothing when no booking can move', async () => {
+      const setStatus = vi.fn();
+      const subject = service(repository('pending', store({ setStatus })));
+
+      await expect(subject.bulk({ ids: ['bk_x'], action: 'cancel' })).resolves.toEqual({
+        updated: [],
+        failed: [{ id: 'bk_x', reason: 'Booking not found' }],
+      });
+      expect(setStatus).not.toHaveBeenCalled();
     });
   });
 });

@@ -154,6 +154,17 @@ export class BookingStore {
     return rows.at(0)?.status;
   }
 
+  /**
+   * Locks the bookings that exist among `ids` and returns their statuses. The rows are locked in
+   * the order they were made, whatever the order of the request, so that two bulk requests that
+   * share bookings queue behind each other instead of waiting for each other.
+   */
+  async lockBookings(ids: readonly string[]): Promise<Map<string, BookingStatus>> {
+    const rows = await this.tx.$queryRaw<{ id: string; status: BookingStatus }[]>`
+      SELECT id, status FROM bookings WHERE id IN (${Prisma.join(ids)}) ORDER BY seq FOR UPDATE`;
+    return new Map(rows.map((row) => [row.id, row.status]));
+  }
+
   /** The bookings that keep a room occupied during the interval, in the order they were made. */
   conflicts(
     roomId: string,
@@ -172,6 +183,11 @@ export class BookingStore {
 
   async update(id: string, row: BookingRow): Promise<void> {
     await this.tx.booking.update({ where: { id }, data: row });
+  }
+
+  /** Moves locked bookings to a status. */
+  async setStatus(ids: readonly string[], status: BookingStatus): Promise<void> {
+    await this.tx.booking.updateMany({ where: { id: { in: [...ids] } }, data: { status } });
   }
 
   /** A booking read back inside the transaction that wrote it, where it cannot be missing. */
@@ -227,6 +243,11 @@ export class BookingsRepository {
     return findConflicts(this.prisma.client, roomId, startsAt, endsAt, exceptId);
   }
 
+  /** Runs `work` in a transaction, for a write that cannot make two bookings overlap. */
+  inTransaction<T>(work: (store: BookingStore) => Promise<T>): Promise<T> {
+    return this.prisma.client.$transaction((tx) => work(new BookingStore(tx)));
+  }
+
   /**
    * Runs `work` in a transaction. `'overlap'` when the database refused a write because the room
    * is occupied at that time: the check in `work` cannot see a booking that another transaction
@@ -234,7 +255,7 @@ export class BookingsRepository {
    */
   async transaction<T>(work: (store: BookingStore) => Promise<T>): Promise<T | 'overlap'> {
     try {
-      return await this.prisma.client.$transaction((tx) => work(new BookingStore(tx)));
+      return await this.inTransaction(work);
     } catch (error) {
       if (isExclusionViolation(error)) return 'overlap';
       throw error;

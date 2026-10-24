@@ -4,6 +4,8 @@ import {
   bookingInputSchema,
   bookingPageSchema,
   bookingSchema,
+  bulkBookingRequestSchema,
+  bulkBookingResultSchema,
   locationInputSchema,
   locationPageSchema,
   locationSchema,
@@ -39,6 +41,8 @@ const COMPONENTS = {
   Booking: bookingSchema,
   BookingInput: bookingInputSchema,
   BookingPage: bookingPageSchema,
+  BulkBookingRequest: bulkBookingRequestSchema,
+  BulkBookingResult: bulkBookingResultSchema,
 };
 
 // Zod throws when an id is taken, so a clash shows up at startup.
