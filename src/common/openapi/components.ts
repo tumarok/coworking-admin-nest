@@ -6,6 +6,9 @@ import {
   locationSchema,
   loginRequestSchema,
   loginResponseSchema,
+  roomInputSchema,
+  roomPageSchema,
+  roomSchema,
   userSchema,
 } from '../../contract/index.js';
 
@@ -21,6 +24,9 @@ const COMPONENTS = {
   Location: locationSchema,
   LocationInput: locationInputSchema,
   LocationPage: locationPageSchema,
+  Room: roomSchema,
+  RoomInput: roomInputSchema,
+  RoomPage: roomPageSchema,
 };
 
 // Zod throws when an id is taken, so a clash shows up at startup.
