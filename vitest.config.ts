@@ -49,6 +49,20 @@ export default defineConfig({
           testTimeout: 30_000,
         },
       },
+      {
+        plugins,
+        test: {
+          name: 'timing',
+          globals: true,
+          env,
+          include: ['test/**/*.timing-spec.ts'],
+          globalSetup: ['test/setup/global-setup.ts'],
+          hookTimeout: 120_000,
+          testTimeout: 30_000,
+          // Runs alone, once the other projects are done: a time limit means nothing under load.
+          sequence: { groupOrder: 1 },
+        },
+      },
     ],
     coverage: {
       provider: 'v8',
