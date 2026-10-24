@@ -1,0 +1,39 @@
+{
+  "name": "coworking-admin-nest",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "REST API for the Coworking Admin frontends: NestJS 12, PostgreSQL 18, Zod contract.",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "nest start --watch",
+    "start": "node dist/main.js",
+    "build": "nest build",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@nestjs/common": "12.2.0",
+    "@nestjs/core": "12.2.0",
+    "@nestjs/platform-express": "12.2.0",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "12.0.10",
+    "@nestjs/testing": "12.2.0",
+    "@types/express": "5.0.6",
+    "@types/node": "24.19.2",
+    "@types/supertest": "7.2.1",
+    "prettier": "3.9.10",
+    "supertest": "7.3.1",
+    "typescript": "6.0.3",
+    "vite": "8.3.5",
+    "vitest": "5.0.5"
+  },
+  "overrides": {
+    "multer": "2.5.0"
+  }
+}
