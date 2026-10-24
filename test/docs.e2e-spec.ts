@@ -67,6 +67,9 @@ describe('API documentation', () => {
           'Location',
           'LocationInput',
           'LocationPage',
+          'Member',
+          'MemberInput',
+          'MemberPage',
           'Room',
           'RoomInput',
           'RoomPage',
@@ -139,12 +142,44 @@ describe('API documentation', () => {
       expect(responses('/api/v1/rooms', 'post')['201']).toContain('#/components/schemas/Room');
     });
 
+    it('documents every member route with its success and error bodies', () => {
+      const { paths } = document();
+
+      expect(Object.keys(paths['/api/v1/members'] ?? {})).toEqual(['get', 'post']);
+      expect(Object.keys(paths['/api/v1/members/{id}'] ?? {})).toEqual(['get', 'patch', 'delete']);
+      expect(Object.keys(responses('/api/v1/members', 'get'))).toEqual(['200', '401', '422']);
+      expect(Object.keys(responses('/api/v1/members', 'post'))).toEqual(['201', '401', '422']);
+      expect(Object.keys(responses('/api/v1/members/{id}', 'get'))).toEqual(['200', '401', '404']);
+      expect(Object.keys(responses('/api/v1/members/{id}', 'patch'))).toEqual([
+        '200',
+        '401',
+        '404',
+        '422',
+      ]);
+      expect(Object.keys(responses('/api/v1/members/{id}', 'delete'))).toEqual([
+        '204',
+        '401',
+        '404',
+        '409',
+      ]);
+      expect(responses('/api/v1/members/{id}', 'delete')['204']).not.toContain('application/json');
+      expect(responses('/api/v1/members', 'post')['201']).toContain('#/components/schemas/Member');
+    });
+
     it('lists the query of the rooms list', () => {
       const parameters = document().paths['/api/v1/rooms'].get?.parameters ?? [];
 
       expect(
         parameters.map((parameter) => ('name' in parameter ? parameter.name : undefined)),
       ).toEqual(['page', 'limit', 'q', 'locationId', 'type', 'status', 'minCapacity']);
+    });
+
+    it('lists the query of the members list', () => {
+      const parameters = document().paths['/api/v1/members'].get?.parameters ?? [];
+
+      expect(
+        parameters.map((parameter) => ('name' in parameter ? parameter.name : undefined)),
+      ).toEqual(['page', 'limit', 'q', 'plan', 'status']);
     });
 
     it('lists the query of the locations list', () => {
@@ -165,6 +200,12 @@ describe('API documentation', () => {
       const body = document().paths['/api/v1/rooms/{id}'].patch?.requestBody;
 
       expect(JSON.stringify(body)).toContain('"required":["locationId","name"');
+    });
+
+    it('describes the body of a member PATCH, which a pipe does not validate', () => {
+      const body = document().paths['/api/v1/members/{id}'].patch?.requestBody;
+
+      expect(JSON.stringify(body)).toContain('"required":["firstName","lastName"');
     });
 
     it('does not ask for a token to sign in', () => {

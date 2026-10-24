@@ -6,6 +6,9 @@ import {
   locationSchema,
   loginRequestSchema,
   loginResponseSchema,
+  memberInputSchema,
+  memberPageSchema,
+  memberSchema,
   roomInputSchema,
   roomPageSchema,
   roomSchema,
@@ -27,6 +30,9 @@ const COMPONENTS = {
   Room: roomSchema,
   RoomInput: roomInputSchema,
   RoomPage: roomPageSchema,
+  Member: memberSchema,
+  MemberInput: memberInputSchema,
+  MemberPage: memberPageSchema,
 };
 
 // Zod throws when an id is taken, so a clash shows up at startup.
