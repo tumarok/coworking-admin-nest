@@ -1,0 +1,131 @@
+import { buildOpenApiDocument } from '../src/common/openapi/openapi-document.js';
+import { testApp, type TestApp } from './support/test-app.js';
+
+describe('API documentation', () => {
+  let api: TestApp;
+
+  beforeAll(async () => {
+    api = await testApp();
+  });
+
+  afterAll(async () => {
+    await api.close();
+  });
+
+  describe('GET /docs', () => {
+    it('serves the API reference page', async () => {
+      const { status, headers, text } = await api.http.get('/docs');
+
+      expect(status).toBe(200);
+      expect(headers['content-type']).toMatch(/^text\/html/);
+      expect(text).toContain('Coworking Admin API');
+    });
+
+    it('allows the reference scripts from its CDN on this page only', async () => {
+      const docs = await api.http.get('/docs');
+      const other = await api.http.get('/api/v1/auth/me');
+
+      expect(docs.headers['content-security-policy']).toContain(
+        "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
+      );
+      expect(other.headers['content-security-policy']).toContain("script-src 'self'");
+      expect(other.headers['content-security-policy']).not.toContain('jsdelivr');
+    });
+
+    it('answers a trailing slash', async () => {
+      expect((await api.http.get('/docs/')).status).toBe(200);
+    });
+  });
+
+  describe('the OpenAPI document', () => {
+    const document = () => buildOpenApiDocument(api.app);
+    const responses = (path: string, method: 'get' | 'post' | 'patch' | 'delete') => {
+      const operation = document().paths[path][method];
+      return Object.fromEntries(
+        Object.entries(operation?.responses ?? {}).map(([status, response]) => [
+          status,
+          JSON.stringify(response),
+        ]),
+      );
+    };
+
+    it('is OpenAPI 3.1 with bearer authentication', () => {
+      const { openapi, components } = document();
+
+      expect(openapi).toBe('3.1.0');
+      expect(components?.securitySchemes).toMatchObject({
+        bearer: { type: 'http', scheme: 'bearer' },
+      });
+    });
+
+    it('describes the contract schemas as components', () => {
+      const schemas = document().components?.schemas ?? {};
+
+      expect(Object.keys(schemas)).toEqual(
+        expect.arrayContaining(['ApiError', 'Location', 'LocationInput', 'LocationPage', 'User']),
+      );
+      expect(schemas.LocationInput).toMatchObject({
+        required: ['name', 'city', 'address', 'timezone', 'opensAt', 'closesAt', 'status'],
+        properties: { name: { type: 'string', minLength: 2, maxLength: 80 } },
+      });
+    });
+
+    it('documents every location route with its success and error bodies', () => {
+      const { paths } = document();
+
+      expect(Object.keys(paths['/api/v1/locations'] ?? {})).toEqual(['get', 'post']);
+      expect(Object.keys(paths['/api/v1/locations/{id}'] ?? {})).toEqual([
+        'get',
+        'patch',
+        'delete',
+      ]);
+      expect(Object.keys(responses('/api/v1/locations', 'get'))).toEqual(['200', '401', '422']);
+      expect(Object.keys(responses('/api/v1/locations', 'post'))).toEqual(['201', '401', '422']);
+      expect(Object.keys(responses('/api/v1/locations/{id}', 'get'))).toEqual([
+        '200',
+        '401',
+        '404',
+      ]);
+      expect(Object.keys(responses('/api/v1/locations/{id}', 'patch'))).toEqual([
+        '200',
+        '401',
+        '404',
+        '422',
+      ]);
+      expect(Object.keys(responses('/api/v1/locations/{id}', 'delete'))).toEqual([
+        '204',
+        '401',
+        '404',
+        '409',
+      ]);
+      expect(responses('/api/v1/locations/{id}', 'delete')['204']).not.toContain(
+        'application/json',
+      );
+      expect(responses('/api/v1/locations', 'post')['201']).toContain(
+        '#/components/schemas/Location',
+      );
+    });
+
+    it('lists the query of the locations list', () => {
+      const parameters = document().paths['/api/v1/locations'].get?.parameters ?? [];
+
+      expect(
+        parameters.map((parameter) => ('name' in parameter ? parameter.name : undefined)),
+      ).toEqual(['page', 'limit', 'q', 'city', 'status']);
+    });
+
+    it('describes the body of a PATCH, which a pipe does not validate', () => {
+      const body = document().paths['/api/v1/locations/{id}'].patch?.requestBody;
+
+      expect(JSON.stringify(body)).toContain('"required":["name","city"');
+    });
+
+    it('does not ask for a token to sign in', () => {
+      const { paths } = document();
+
+      expect(paths['/api/v1/auth/login'].post?.security).toBeUndefined();
+      expect(Object.keys(responses('/api/v1/auth/login', 'post'))).toEqual(['200', '401', '422']);
+      expect(paths['/api/v1/auth/me'].get?.security).toEqual([{ bearer: [] }]);
+    });
+  });
+});

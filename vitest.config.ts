@@ -55,6 +55,9 @@ export default defineConfig({
       include: ['src/**/*.ts'],
       exclude: ['src/main.ts', 'src/database/seed/cli.ts', 'src/generated/**', 'src/**/*.spec.ts'],
       reporter: ['text-summary', 'lcov'],
+      // A few points under the measured values (99 % lines, 92 % branches), so a module added
+      // without tests fails the run.
+      thresholds: { statements: 95, lines: 95, functions: 95, branches: 88 },
     },
   },
 });

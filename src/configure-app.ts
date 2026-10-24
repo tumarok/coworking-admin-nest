@@ -6,6 +6,7 @@ import { jsonBody } from './common/http/json-body.js';
 import { noStore } from './common/http/no-store.js';
 import { parseQuery } from './common/http/parse-query.js';
 import { requestLogger } from './common/logging/request-logger.js';
+import { mountDocs } from './common/openapi/mount-docs.js';
 import { ContractValidationPipe } from './common/validation/contract-validation.pipe.js';
 import { ENV, type Env } from './config/env.js';
 
@@ -41,6 +42,7 @@ export const configureApp = (app: NestExpressApplication): void => {
   app.use(noStore());
   app.use(requestLogger());
   app.use(...jsonBody());
+  mountDocs(app);
 
   app.useGlobalPipes(new ContractValidationPipe());
   app.useGlobalFilters(new ApiExceptionFilter());
