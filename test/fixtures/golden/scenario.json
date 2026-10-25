@@ -1,0 +1,1728 @@
+{
+  "seed": 42,
+  "now": "2026-10-14T09:00:00.000Z",
+  "steps": [
+    {
+      "label": "sign in with a wrong password",
+      "method": "POST",
+      "path": "/auth/login",
+      "query": {},
+      "body": {
+        "email": "admin@coworking.test",
+        "password": "nope-nope"
+      },
+      "auth": "none",
+      "status": 401,
+      "response": {
+        "message": "Invalid email or password"
+      }
+    },
+    {
+      "label": "list without a token",
+      "method": "GET",
+      "path": "/locations",
+      "query": {},
+      "auth": "none",
+      "status": 401,
+      "response": {
+        "message": "Authentication required"
+      }
+    },
+    {
+      "label": "current user with a bad token",
+      "method": "GET",
+      "path": "/auth/me",
+      "query": {},
+      "auth": "garbage",
+      "status": 401,
+      "response": {
+        "message": "Authentication required"
+      }
+    },
+    {
+      "label": "sign in",
+      "method": "POST",
+      "path": "/auth/login",
+      "query": {},
+      "body": {
+        "email": "ADMIN@coworking.test",
+        "password": "demo1234"
+      },
+      "auth": "none",
+      "status": 200,
+      "response": {
+        "token": "demo-token.usr_admin",
+        "user": {
+          "id": "usr_admin",
+          "name": "Alex Morgan",
+          "email": "admin@coworking.test",
+          "role": "admin"
+        }
+      }
+    },
+    {
+      "label": "current user",
+      "method": "GET",
+      "path": "/auth/me",
+      "query": {},
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "id": "usr_admin",
+        "name": "Alex Morgan",
+        "email": "admin@coworking.test",
+        "role": "admin"
+      }
+    },
+    {
+      "label": "create an invalid location",
+      "method": "POST",
+      "path": "/locations",
+      "query": {},
+      "body": {
+        "name": "X"
+      },
+      "auth": "admin",
+      "status": 422,
+      "response": {
+        "message": "Validation failed",
+        "fieldErrors": {
+          "name": "At least 2 characters",
+          "city": "Invalid input: expected string, received undefined",
+          "address": "Invalid input: expected string, received undefined",
+          "timezone": "Invalid option: expected one of \"Europe/Kyiv\"|\"Europe/Warsaw\"|\"Europe/Berlin\"|\"Europe/Lisbon\"|\"Europe/London\"",
+          "opensAt": "Invalid input: expected string, received undefined",
+          "closesAt": "Invalid input: expected string, received undefined",
+          "status": "Invalid option: expected one of \"active\"|\"inactive\""
+        }
+      }
+    },
+    {
+      "label": "create a location",
+      "method": "POST",
+      "path": "/locations",
+      "query": {},
+      "body": {
+        "name": "Scenario Hub",
+        "city": "Kyiv",
+        "address": "1 Test Street",
+        "timezone": "Europe/Kyiv",
+        "opensAt": "08:00",
+        "closesAt": "20:00",
+        "status": "active"
+      },
+      "auth": "admin",
+      "status": 201,
+      "response": {
+        "id": "loc_138",
+        "name": "Scenario Hub",
+        "city": "Kyiv",
+        "address": "1 Test Street",
+        "timezone": "Europe/Kyiv",
+        "opensAt": "08:00",
+        "closesAt": "20:00",
+        "status": "active",
+        "roomCount": 0
+      }
+    },
+    {
+      "label": "read the location",
+      "method": "GET",
+      "path": "/locations/loc_138",
+      "query": {},
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "id": "loc_138",
+        "name": "Scenario Hub",
+        "city": "Kyiv",
+        "address": "1 Test Street",
+        "timezone": "Europe/Kyiv",
+        "opensAt": "08:00",
+        "closesAt": "20:00",
+        "status": "active",
+        "roomCount": 0
+      }
+    },
+    {
+      "label": "search locations",
+      "method": "GET",
+      "path": "/locations",
+      "query": {
+        "q": "scenario"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "loc_138",
+            "name": "Scenario Hub",
+            "city": "Kyiv",
+            "address": "1 Test Street",
+            "timezone": "Europe/Kyiv",
+            "opensAt": "08:00",
+            "closesAt": "20:00",
+            "status": "active",
+            "roomCount": 0
+          }
+        ],
+        "total": 1,
+        "page": 1,
+        "limit": 20
+      }
+    },
+    {
+      "label": "rename the location",
+      "method": "PATCH",
+      "path": "/locations/loc_138",
+      "query": {},
+      "body": {
+        "name": "Scenario Hub North",
+        "city": "Kyiv",
+        "address": "2 Test Street",
+        "timezone": "Europe/Kyiv",
+        "opensAt": "08:00",
+        "closesAt": "20:00",
+        "status": "active"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "id": "loc_138",
+        "name": "Scenario Hub North",
+        "city": "Kyiv",
+        "address": "2 Test Street",
+        "timezone": "Europe/Kyiv",
+        "opensAt": "08:00",
+        "closesAt": "20:00",
+        "status": "active",
+        "roomCount": 0
+      }
+    },
+    {
+      "label": "update a missing location with an invalid body",
+      "method": "PATCH",
+      "path": "/locations/loc_zz",
+      "query": {},
+      "body": {},
+      "auth": "admin",
+      "status": 404,
+      "response": {
+        "message": "Location not found"
+      }
+    },
+    {
+      "label": "create a room in a missing location",
+      "method": "POST",
+      "path": "/rooms",
+      "query": {},
+      "body": {
+        "locationId": "loc_zz",
+        "name": "Ghost",
+        "type": "meeting_room",
+        "capacity": 4,
+        "hourlyRate": 1000,
+        "amenities": [],
+        "status": "available"
+      },
+      "auth": "admin",
+      "status": 422,
+      "response": {
+        "message": "Validation failed",
+        "fieldErrors": {
+          "locationId": "Location not found"
+        }
+      }
+    },
+    {
+      "label": "create the first room",
+      "method": "POST",
+      "path": "/rooms",
+      "query": {},
+      "body": {
+        "locationId": "loc_138",
+        "name": "Onyx",
+        "type": "meeting_room",
+        "capacity": 6,
+        "hourlyRate": 2500,
+        "amenities": ["projector"],
+        "status": "available"
+      },
+      "auth": "admin",
+      "status": 201,
+      "response": {
+        "id": "room_139",
+        "locationId": "loc_138",
+        "name": "Onyx",
+        "type": "meeting_room",
+        "capacity": 6,
+        "hourlyRate": 2500,
+        "amenities": ["projector"],
+        "status": "available",
+        "locationName": "Scenario Hub North"
+      }
+    },
+    {
+      "label": "create the second room",
+      "method": "POST",
+      "path": "/rooms",
+      "query": {},
+      "body": {
+        "locationId": "loc_138",
+        "name": "Quartz",
+        "type": "hot_desk",
+        "capacity": 2,
+        "hourlyRate": 1500,
+        "amenities": [],
+        "status": "available"
+      },
+      "auth": "admin",
+      "status": 201,
+      "response": {
+        "id": "room_13a",
+        "locationId": "loc_138",
+        "name": "Quartz",
+        "type": "hot_desk",
+        "capacity": 2,
+        "hourlyRate": 1500,
+        "amenities": [],
+        "status": "available",
+        "locationName": "Scenario Hub North"
+      }
+    },
+    {
+      "label": "list the rooms of the location",
+      "method": "GET",
+      "path": "/rooms",
+      "query": {
+        "locationId": "loc_138"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "room_139",
+            "locationId": "loc_138",
+            "name": "Onyx",
+            "type": "meeting_room",
+            "capacity": 6,
+            "hourlyRate": 2500,
+            "amenities": ["projector"],
+            "status": "available",
+            "locationName": "Scenario Hub North"
+          },
+          {
+            "id": "room_13a",
+            "locationId": "loc_138",
+            "name": "Quartz",
+            "type": "hot_desk",
+            "capacity": 2,
+            "hourlyRate": 1500,
+            "amenities": [],
+            "status": "available",
+            "locationName": "Scenario Hub North"
+          }
+        ],
+        "total": 2,
+        "page": 1,
+        "limit": 20
+      }
+    },
+    {
+      "label": "rename a room",
+      "method": "PATCH",
+      "path": "/rooms/room_139",
+      "query": {},
+      "body": {
+        "locationId": "loc_138",
+        "name": "Onyx Large",
+        "type": "meeting_room",
+        "capacity": 6,
+        "hourlyRate": 2500,
+        "amenities": ["projector", "whiteboard"],
+        "status": "available"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "id": "room_139",
+        "locationId": "loc_138",
+        "name": "Onyx Large",
+        "type": "meeting_room",
+        "capacity": 6,
+        "hourlyRate": 2500,
+        "amenities": ["projector", "whiteboard"],
+        "status": "available",
+        "locationName": "Scenario Hub North"
+      }
+    },
+    {
+      "label": "filter rooms by capacity",
+      "method": "GET",
+      "path": "/rooms",
+      "query": {
+        "locationId": "loc_138",
+        "minCapacity": "3"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "room_139",
+            "locationId": "loc_138",
+            "name": "Onyx Large",
+            "type": "meeting_room",
+            "capacity": 6,
+            "hourlyRate": 2500,
+            "amenities": ["projector", "whiteboard"],
+            "status": "available",
+            "locationName": "Scenario Hub North"
+          }
+        ],
+        "total": 1,
+        "page": 1,
+        "limit": 20
+      }
+    },
+    {
+      "label": "create a member",
+      "method": "POST",
+      "path": "/members",
+      "query": {},
+      "body": {
+        "firstName": "Dana",
+        "lastName": "Testova",
+        "email": "Dana.Testova@example.com",
+        "phone": "+380 44 000 00 01",
+        "company": "",
+        "plan": "flex",
+        "status": "active"
+      },
+      "auth": "admin",
+      "status": 201,
+      "response": {
+        "id": "mem_13b",
+        "firstName": "Dana",
+        "lastName": "Testova",
+        "email": "dana.testova@example.com",
+        "phone": "+380 44 000 00 01",
+        "company": null,
+        "plan": "flex",
+        "status": "active",
+        "joinedAt": "2026-10-14"
+      }
+    },
+    {
+      "label": "register the same email in other case",
+      "method": "POST",
+      "path": "/members",
+      "query": {},
+      "body": {
+        "firstName": "Dana",
+        "lastName": "Twin",
+        "email": "dana.testova@example.com",
+        "phone": "+380 44 000 00 02",
+        "company": "Twin Ltd",
+        "plan": "flex",
+        "status": "active"
+      },
+      "auth": "admin",
+      "status": 422,
+      "response": {
+        "message": "Validation failed",
+        "fieldErrors": {
+          "email": "This email is already registered"
+        }
+      }
+    },
+    {
+      "label": "search members",
+      "method": "GET",
+      "path": "/members",
+      "query": {
+        "q": "testova"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "mem_13b",
+            "firstName": "Dana",
+            "lastName": "Testova",
+            "email": "dana.testova@example.com",
+            "phone": "+380 44 000 00 01",
+            "company": null,
+            "plan": "flex",
+            "status": "active",
+            "joinedAt": "2026-10-14"
+          }
+        ],
+        "total": 1,
+        "page": 1,
+        "limit": 20
+      }
+    },
+    {
+      "label": "create a member to delete",
+      "method": "POST",
+      "path": "/members",
+      "query": {},
+      "body": {
+        "firstName": "Temp",
+        "lastName": "Visitor",
+        "email": "temp.visitor@example.com",
+        "phone": "+380 44 000 00 03",
+        "company": "Temp Ltd",
+        "plan": "day_pass",
+        "status": "active"
+      },
+      "auth": "admin",
+      "status": 201,
+      "response": {
+        "id": "mem_13c",
+        "firstName": "Temp",
+        "lastName": "Visitor",
+        "email": "temp.visitor@example.com",
+        "phone": "+380 44 000 00 03",
+        "company": "Temp Ltd",
+        "plan": "day_pass",
+        "status": "active",
+        "joinedAt": "2026-10-14"
+      }
+    },
+    {
+      "label": "delete a member without bookings",
+      "method": "DELETE",
+      "path": "/members/mem_13c",
+      "query": {},
+      "auth": "admin",
+      "status": 204,
+      "response": null
+    },
+    {
+      "label": "read the deleted member",
+      "method": "GET",
+      "path": "/members/mem_13c",
+      "query": {},
+      "auth": "admin",
+      "status": 404,
+      "response": {
+        "message": "Member not found"
+      }
+    },
+    {
+      "label": "book a slot",
+      "method": "POST",
+      "path": "/bookings",
+      "query": {},
+      "body": {
+        "roomId": "room_139",
+        "memberId": "mem_13b",
+        "startsAt": "2026-11-10T10:00:00.000Z",
+        "endsAt": "2026-11-10T12:00:00.000Z",
+        "attendees": 4,
+        "notes": null
+      },
+      "auth": "admin",
+      "status": 201,
+      "response": {
+        "id": "bk_13d",
+        "roomId": "room_139",
+        "memberId": "mem_13b",
+        "startsAt": "2026-11-10T10:00:00.000Z",
+        "endsAt": "2026-11-10T12:00:00.000Z",
+        "attendees": 4,
+        "notes": null,
+        "status": "pending",
+        "totalPrice": 5000,
+        "createdAt": "2026-10-14T09:00:00.000Z",
+        "roomName": "Onyx Large",
+        "locationId": "loc_138",
+        "locationName": "Scenario Hub North",
+        "memberName": "Dana Testova"
+      }
+    },
+    {
+      "label": "book an overlapping slot",
+      "method": "POST",
+      "path": "/bookings",
+      "query": {},
+      "body": {
+        "roomId": "room_139",
+        "memberId": "mem_13b",
+        "startsAt": "2026-11-10T11:00:00.000Z",
+        "endsAt": "2026-11-10T13:00:00.000Z",
+        "attendees": 4,
+        "notes": null
+      },
+      "auth": "admin",
+      "status": 409,
+      "response": {
+        "message": "The room is already booked for this time",
+        "conflicts": [
+          {
+            "id": "bk_13d",
+            "startsAt": "2026-11-10T10:00:00.000Z",
+            "endsAt": "2026-11-10T12:00:00.000Z"
+          }
+        ]
+      }
+    },
+    {
+      "label": "book above the capacity",
+      "method": "POST",
+      "path": "/bookings",
+      "query": {},
+      "body": {
+        "roomId": "room_139",
+        "memberId": "mem_13b",
+        "startsAt": "2026-11-10T14:00:00.000Z",
+        "endsAt": "2026-11-10T15:00:00.000Z",
+        "attendees": 7,
+        "notes": null
+      },
+      "auth": "admin",
+      "status": 422,
+      "response": {
+        "message": "Validation failed",
+        "fieldErrors": {
+          "attendees": "This room seats up to 6"
+        }
+      }
+    },
+    {
+      "label": "book outside the working hours",
+      "method": "POST",
+      "path": "/bookings",
+      "query": {},
+      "body": {
+        "roomId": "room_139",
+        "memberId": "mem_13b",
+        "startsAt": "2026-11-10T03:00:00.000Z",
+        "endsAt": "2026-11-10T05:00:00.000Z",
+        "attendees": 4,
+        "notes": null
+      },
+      "auth": "admin",
+      "status": 422,
+      "response": {
+        "message": "Validation failed",
+        "fieldErrors": {
+          "startsAt": "Outside opening hours (08:00–20:00 local time)"
+        }
+      }
+    },
+    {
+      "label": "book the slot right after",
+      "method": "POST",
+      "path": "/bookings",
+      "query": {},
+      "body": {
+        "roomId": "room_139",
+        "memberId": "mem_13b",
+        "startsAt": "2026-11-10T12:00:00.000Z",
+        "endsAt": "2026-11-10T13:30:00.000Z",
+        "attendees": 4,
+        "notes": "Touching the first"
+      },
+      "auth": "admin",
+      "status": 201,
+      "response": {
+        "id": "bk_13e",
+        "roomId": "room_139",
+        "memberId": "mem_13b",
+        "startsAt": "2026-11-10T12:00:00.000Z",
+        "endsAt": "2026-11-10T13:30:00.000Z",
+        "attendees": 4,
+        "notes": "Touching the first",
+        "status": "pending",
+        "totalPrice": 3750,
+        "createdAt": "2026-10-14T09:00:00.000Z",
+        "roomName": "Onyx Large",
+        "locationId": "loc_138",
+        "locationName": "Scenario Hub North",
+        "memberName": "Dana Testova"
+      }
+    },
+    {
+      "label": "read the booking",
+      "method": "GET",
+      "path": "/bookings/bk_13d",
+      "query": {},
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "id": "bk_13d",
+        "roomId": "room_139",
+        "memberId": "mem_13b",
+        "startsAt": "2026-11-10T10:00:00.000Z",
+        "endsAt": "2026-11-10T12:00:00.000Z",
+        "attendees": 4,
+        "notes": null,
+        "status": "pending",
+        "totalPrice": 5000,
+        "createdAt": "2026-10-14T09:00:00.000Z",
+        "roomName": "Onyx Large",
+        "locationId": "loc_138",
+        "locationName": "Scenario Hub North",
+        "memberName": "Dana Testova"
+      }
+    },
+    {
+      "label": "list the bookings of the room",
+      "method": "GET",
+      "path": "/bookings",
+      "query": {
+        "roomId": "room_139"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "bk_13e",
+            "roomId": "room_139",
+            "memberId": "mem_13b",
+            "startsAt": "2026-11-10T12:00:00.000Z",
+            "endsAt": "2026-11-10T13:30:00.000Z",
+            "attendees": 4,
+            "notes": "Touching the first",
+            "status": "pending",
+            "totalPrice": 3750,
+            "createdAt": "2026-10-14T09:00:00.000Z",
+            "roomName": "Onyx Large",
+            "locationId": "loc_138",
+            "locationName": "Scenario Hub North",
+            "memberName": "Dana Testova"
+          },
+          {
+            "id": "bk_13d",
+            "roomId": "room_139",
+            "memberId": "mem_13b",
+            "startsAt": "2026-11-10T10:00:00.000Z",
+            "endsAt": "2026-11-10T12:00:00.000Z",
+            "attendees": 4,
+            "notes": null,
+            "status": "pending",
+            "totalPrice": 5000,
+            "createdAt": "2026-10-14T09:00:00.000Z",
+            "roomName": "Onyx Large",
+            "locationId": "loc_138",
+            "locationName": "Scenario Hub North",
+            "memberName": "Dana Testova"
+          }
+        ],
+        "total": 2,
+        "page": 1,
+        "limit": 20
+      }
+    },
+    {
+      "label": "move the booking",
+      "method": "PATCH",
+      "path": "/bookings/bk_13d",
+      "query": {},
+      "body": {
+        "roomId": "room_139",
+        "memberId": "mem_13b",
+        "startsAt": "2026-11-10T08:00:00.000Z",
+        "endsAt": "2026-11-10T09:30:00.000Z",
+        "attendees": 4,
+        "notes": null
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "id": "bk_13d",
+        "roomId": "room_139",
+        "memberId": "mem_13b",
+        "startsAt": "2026-11-10T08:00:00.000Z",
+        "endsAt": "2026-11-10T09:30:00.000Z",
+        "attendees": 4,
+        "notes": null,
+        "status": "pending",
+        "totalPrice": 3750,
+        "createdAt": "2026-10-14T09:00:00.000Z",
+        "roomName": "Onyx Large",
+        "locationId": "loc_138",
+        "locationName": "Scenario Hub North",
+        "memberName": "Dana Testova"
+      }
+    },
+    {
+      "label": "move the booking into another",
+      "method": "PATCH",
+      "path": "/bookings/bk_13d",
+      "query": {},
+      "body": {
+        "roomId": "room_139",
+        "memberId": "mem_13b",
+        "startsAt": "2026-11-10T12:30:00.000Z",
+        "endsAt": "2026-11-10T13:00:00.000Z",
+        "attendees": 4,
+        "notes": null
+      },
+      "auth": "admin",
+      "status": 409,
+      "response": {
+        "message": "The room is already booked for this time",
+        "conflicts": [
+          {
+            "id": "bk_13e",
+            "startsAt": "2026-11-10T12:00:00.000Z",
+            "endsAt": "2026-11-10T13:30:00.000Z"
+          }
+        ]
+      }
+    },
+    {
+      "label": "confirm",
+      "method": "POST",
+      "path": "/bookings/bk_13d/status",
+      "query": {},
+      "body": {
+        "status": "confirmed"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "id": "bk_13d",
+        "roomId": "room_139",
+        "memberId": "mem_13b",
+        "startsAt": "2026-11-10T08:00:00.000Z",
+        "endsAt": "2026-11-10T09:30:00.000Z",
+        "attendees": 4,
+        "notes": null,
+        "status": "confirmed",
+        "totalPrice": 3750,
+        "createdAt": "2026-10-14T09:00:00.000Z",
+        "roomName": "Onyx Large",
+        "locationId": "loc_138",
+        "locationName": "Scenario Hub North",
+        "memberName": "Dana Testova"
+      }
+    },
+    {
+      "label": "check in",
+      "method": "POST",
+      "path": "/bookings/bk_13d/status",
+      "query": {},
+      "body": {
+        "status": "checked_in"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "id": "bk_13d",
+        "roomId": "room_139",
+        "memberId": "mem_13b",
+        "startsAt": "2026-11-10T08:00:00.000Z",
+        "endsAt": "2026-11-10T09:30:00.000Z",
+        "attendees": 4,
+        "notes": null,
+        "status": "checked_in",
+        "totalPrice": 3750,
+        "createdAt": "2026-10-14T09:00:00.000Z",
+        "roomName": "Onyx Large",
+        "locationId": "loc_138",
+        "locationName": "Scenario Hub North",
+        "memberName": "Dana Testova"
+      }
+    },
+    {
+      "label": "complete",
+      "method": "POST",
+      "path": "/bookings/bk_13d/status",
+      "query": {},
+      "body": {
+        "status": "completed"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "id": "bk_13d",
+        "roomId": "room_139",
+        "memberId": "mem_13b",
+        "startsAt": "2026-11-10T08:00:00.000Z",
+        "endsAt": "2026-11-10T09:30:00.000Z",
+        "attendees": 4,
+        "notes": null,
+        "status": "completed",
+        "totalPrice": 3750,
+        "createdAt": "2026-10-14T09:00:00.000Z",
+        "roomName": "Onyx Large",
+        "locationId": "loc_138",
+        "locationName": "Scenario Hub North",
+        "memberName": "Dana Testova"
+      }
+    },
+    {
+      "label": "edit a completed booking",
+      "method": "PATCH",
+      "path": "/bookings/bk_13d",
+      "query": {},
+      "body": {
+        "roomId": "room_139",
+        "memberId": "mem_13b",
+        "startsAt": "2026-11-10T10:00:00.000Z",
+        "endsAt": "2026-11-10T12:00:00.000Z",
+        "attendees": 4,
+        "notes": null
+      },
+      "auth": "admin",
+      "status": 409,
+      "response": {
+        "message": "Only pending or confirmed bookings can be edited"
+      }
+    },
+    {
+      "label": "reopen a completed booking",
+      "method": "POST",
+      "path": "/bookings/bk_13d/status",
+      "query": {},
+      "body": {
+        "status": "pending"
+      },
+      "auth": "admin",
+      "status": 409,
+      "response": {
+        "message": "Cannot change status from completed to pending"
+      }
+    },
+    {
+      "label": "set an unknown status",
+      "method": "POST",
+      "path": "/bookings/bk_13e/status",
+      "query": {},
+      "body": {
+        "status": "done"
+      },
+      "auth": "admin",
+      "status": 422,
+      "response": {
+        "message": "Validation failed",
+        "fieldErrors": {
+          "status": "Invalid option: expected one of \"pending\"|\"confirmed\"|\"checked_in\"|\"completed\"|\"cancelled\"|\"no_show\""
+        }
+      }
+    },
+    {
+      "label": "bulk confirm",
+      "method": "POST",
+      "path": "/bookings/bulk",
+      "query": {},
+      "body": {
+        "ids": ["bk_13e", "bk_13d", "bk_missing", "bk_13e"],
+        "action": "confirm"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "updated": ["bk_13e"],
+        "failed": [
+          {
+            "id": "bk_13d",
+            "reason": "Cannot confirm a booking that is completed"
+          },
+          {
+            "id": "bk_missing",
+            "reason": "Booking not found"
+          },
+          {
+            "id": "bk_13e",
+            "reason": "Cannot confirm a booking that is confirmed"
+          }
+        ]
+      }
+    },
+    {
+      "label": "delete a location with rooms",
+      "method": "DELETE",
+      "path": "/locations/loc_138",
+      "query": {},
+      "auth": "admin",
+      "status": 409,
+      "response": {
+        "message": "Remove or move the rooms of this location first"
+      }
+    },
+    {
+      "label": "delete a room with upcoming bookings",
+      "method": "DELETE",
+      "path": "/rooms/room_139",
+      "query": {},
+      "auth": "admin",
+      "status": 409,
+      "response": {
+        "message": "This room has upcoming bookings; cancel them first"
+      }
+    },
+    {
+      "label": "delete a member with upcoming bookings",
+      "method": "DELETE",
+      "path": "/members/mem_13b",
+      "query": {},
+      "auth": "admin",
+      "status": 409,
+      "response": {
+        "message": "This member has upcoming bookings; cancel them first"
+      }
+    },
+    {
+      "label": "delete a room without bookings",
+      "method": "DELETE",
+      "path": "/rooms/room_13a",
+      "query": {},
+      "auth": "admin",
+      "status": 204,
+      "response": null
+    },
+    {
+      "label": "read the deleted room",
+      "method": "GET",
+      "path": "/rooms/room_13a",
+      "query": {},
+      "auth": "admin",
+      "status": 404,
+      "response": {
+        "message": "Room not found"
+      }
+    },
+    {
+      "label": "create a location to delete",
+      "method": "POST",
+      "path": "/locations",
+      "query": {},
+      "body": {
+        "name": "Empty Annex",
+        "city": "Lviv",
+        "address": "3 Test Street",
+        "timezone": "Europe/Kyiv",
+        "opensAt": "09:00",
+        "closesAt": "18:00",
+        "status": "inactive"
+      },
+      "auth": "admin",
+      "status": 201,
+      "response": {
+        "id": "loc_13f",
+        "name": "Empty Annex",
+        "city": "Lviv",
+        "address": "3 Test Street",
+        "timezone": "Europe/Kyiv",
+        "opensAt": "09:00",
+        "closesAt": "18:00",
+        "status": "inactive",
+        "roomCount": 0
+      }
+    },
+    {
+      "label": "delete a location without rooms",
+      "method": "DELETE",
+      "path": "/locations/loc_13f",
+      "query": {},
+      "auth": "admin",
+      "status": 204,
+      "response": null
+    },
+    {
+      "label": "bulk cancel",
+      "method": "POST",
+      "path": "/bookings/bulk",
+      "query": {},
+      "body": {
+        "ids": ["bk_13e"],
+        "action": "cancel"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "updated": ["bk_13e"],
+        "failed": []
+      }
+    },
+    {
+      "label": "dashboard of the booked day",
+      "method": "GET",
+      "path": "/dashboard",
+      "query": {
+        "date": "2026-11-10"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "date": "2026-11-10",
+        "kpis": {
+          "bookingsToday": 1,
+          "occupancyRate": 0.005535055350553505,
+          "revenueMonth": 550075,
+          "activeMembers": 72
+        },
+        "occupancy": [
+          {
+            "locationId": "loc_1",
+            "locationName": "Riverside Hub",
+            "bookedHours": 0,
+            "availableHours": 91
+          },
+          {
+            "locationId": "loc_2",
+            "locationName": "Market Square Loft",
+            "bookedHours": 0,
+            "availableHours": 48
+          },
+          {
+            "locationId": "loc_3",
+            "locationName": "Old Mill Works",
+            "bookedHours": 0,
+            "availableHours": 50
+          },
+          {
+            "locationId": "loc_4",
+            "locationName": "Canal Yard",
+            "bookedHours": 0,
+            "availableHours": 70
+          },
+          {
+            "locationId": "loc_138",
+            "locationName": "Scenario Hub North",
+            "bookedHours": 1.5,
+            "availableHours": 12
+          }
+        ],
+        "byStatus": {
+          "pending": 0,
+          "confirmed": 0,
+          "checked_in": 0,
+          "completed": 1,
+          "cancelled": 1,
+          "no_show": 0
+        },
+        "upcoming": [
+          {
+            "id": "bk_kz",
+            "roomId": "room_6",
+            "memberId": "mem_2w",
+            "startsAt": "2026-10-14T10:00:00.000Z",
+            "endsAt": "2026-10-14T12:00:00.000Z",
+            "attendees": 1,
+            "status": "confirmed",
+            "notes": null,
+            "totalPrice": 1300,
+            "createdAt": "2026-10-03T10:00:00.000Z",
+            "roomName": "Granite",
+            "locationId": "loc_1",
+            "locationName": "Riverside Hub",
+            "memberName": "Stephania Connelly-Douglas"
+          },
+          {
+            "id": "bk_l3",
+            "roomId": "room_a",
+            "memberId": "mem_13",
+            "startsAt": "2026-10-14T10:00:00.000Z",
+            "endsAt": "2026-10-14T12:00:00.000Z",
+            "attendees": 5,
+            "status": "confirmed",
+            "notes": null,
+            "totalPrice": 3100,
+            "createdAt": "2026-10-10T10:00:00.000Z",
+            "roomName": "Lumen",
+            "locationId": "loc_1",
+            "locationName": "Riverside Hub",
+            "memberName": "Afton Bauch"
+          },
+          {
+            "id": "bk_l5",
+            "roomId": "room_b",
+            "memberId": "mem_2u",
+            "startsAt": "2026-10-14T10:00:00.000Z",
+            "endsAt": "2026-10-14T12:00:00.000Z",
+            "attendees": 5,
+            "status": "confirmed",
+            "notes": null,
+            "totalPrice": 6900,
+            "createdAt": "2026-10-06T10:00:00.000Z",
+            "roomName": "Aurora",
+            "locationId": "loc_1",
+            "locationName": "Riverside Hub",
+            "memberName": "Julia Stark"
+          },
+          {
+            "id": "bk_ll",
+            "roomId": "room_t",
+            "memberId": "mem_1p",
+            "startsAt": "2026-10-14T10:00:00.000Z",
+            "endsAt": "2026-10-14T11:00:00.000Z",
+            "attendees": 7,
+            "status": "confirmed",
+            "notes": null,
+            "totalPrice": 18200,
+            "createdAt": "2026-10-07T10:00:00.000Z",
+            "roomName": "Juniper",
+            "locationId": "loc_4",
+            "locationName": "Canal Yard",
+            "memberName": "Jammie Beahan"
+          },
+          {
+            "id": "bk_le",
+            "roomId": "room_m",
+            "memberId": "mem_25",
+            "startsAt": "2026-10-14T11:30:00.000Z",
+            "endsAt": "2026-10-14T13:30:00.000Z",
+            "attendees": 2,
+            "status": "pending",
+            "notes": null,
+            "totalPrice": 5400,
+            "createdAt": "2026-10-08T11:30:00.000Z",
+            "roomName": "Iris",
+            "locationId": "loc_3",
+            "locationName": "Old Mill Works",
+            "memberName": "Sasha Herzog"
+          },
+          {
+            "id": "bk_lc",
+            "roomId": "room_h",
+            "memberId": "mem_1q",
+            "startsAt": "2026-10-14T12:00:00.000Z",
+            "endsAt": "2026-10-14T15:00:00.000Z",
+            "attendees": 2,
+            "status": "confirmed",
+            "notes": null,
+            "totalPrice": 7950,
+            "createdAt": "2026-10-03T12:00:00.000Z",
+            "roomName": "Juniper",
+            "locationId": "loc_2",
+            "locationName": "Market Square Loft",
+            "memberName": "Liana Metz"
+          },
+          {
+            "id": "bk_l0",
+            "roomId": "room_6",
+            "memberId": "mem_1s",
+            "startsAt": "2026-10-14T13:00:00.000Z",
+            "endsAt": "2026-10-14T15:00:00.000Z",
+            "attendees": 6,
+            "status": "confirmed",
+            "notes": null,
+            "totalPrice": 1300,
+            "createdAt": "2026-10-04T13:00:00.000Z",
+            "roomName": "Granite",
+            "locationId": "loc_1",
+            "locationName": "Riverside Hub",
+            "memberName": "Marsha Bergnaum"
+          },
+          {
+            "id": "bk_l4",
+            "roomId": "room_a",
+            "memberId": "mem_1j",
+            "startsAt": "2026-10-14T14:00:00.000Z",
+            "endsAt": "2026-10-14T16:00:00.000Z",
+            "attendees": 1,
+            "status": "confirmed",
+            "notes": null,
+            "totalPrice": 3100,
+            "createdAt": "2026-10-02T14:00:00.000Z",
+            "roomName": "Lumen",
+            "locationId": "loc_1",
+            "locationName": "Riverside Hub",
+            "memberName": "Johathan Davis"
+          }
+        ]
+      }
+    },
+    {
+      "label": "dashboard of today",
+      "method": "GET",
+      "path": "/dashboard",
+      "query": {},
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "date": "2026-10-14",
+        "kpis": {
+          "bookingsToday": 23,
+          "occupancyRate": 0.15129151291512916,
+          "revenueMonth": 6267350,
+          "activeMembers": 72
+        },
+        "occupancy": [
+          {
+            "locationId": "loc_1",
+            "locationName": "Riverside Hub",
+            "bookedHours": 16,
+            "availableHours": 91
+          },
+          {
+            "locationId": "loc_2",
+            "locationName": "Market Square Loft",
+            "bookedHours": 11,
+            "availableHours": 48
+          },
+          {
+            "locationId": "loc_3",
+            "locationName": "Old Mill Works",
+            "bookedHours": 11,
+            "availableHours": 50
+          },
+          {
+            "locationId": "loc_4",
+            "locationName": "Canal Yard",
+            "bookedHours": 3,
+            "availableHours": 70
+          },
+          {
+            "locationId": "loc_138",
+            "locationName": "Scenario Hub North",
+            "bookedHours": 0,
+            "availableHours": 12
+          }
+        ],
+        "byStatus": {
+          "pending": 1,
+          "confirmed": 8,
+          "checked_in": 7,
+          "completed": 7,
+          "cancelled": 0,
+          "no_show": 0
+        },
+        "upcoming": [
+          {
+            "id": "bk_kz",
+            "roomId": "room_6",
+            "memberId": "mem_2w",
+            "startsAt": "2026-10-14T10:00:00.000Z",
+            "endsAt": "2026-10-14T12:00:00.000Z",
+            "attendees": 1,
+            "status": "confirmed",
+            "notes": null,
+            "totalPrice": 1300,
+            "createdAt": "2026-10-03T10:00:00.000Z",
+            "roomName": "Granite",
+            "locationId": "loc_1",
+            "locationName": "Riverside Hub",
+            "memberName": "Stephania Connelly-Douglas"
+          },
+          {
+            "id": "bk_l3",
+            "roomId": "room_a",
+            "memberId": "mem_13",
+            "startsAt": "2026-10-14T10:00:00.000Z",
+            "endsAt": "2026-10-14T12:00:00.000Z",
+            "attendees": 5,
+            "status": "confirmed",
+            "notes": null,
+            "totalPrice": 3100,
+            "createdAt": "2026-10-10T10:00:00.000Z",
+            "roomName": "Lumen",
+            "locationId": "loc_1",
+            "locationName": "Riverside Hub",
+            "memberName": "Afton Bauch"
+          },
+          {
+            "id": "bk_l5",
+            "roomId": "room_b",
+            "memberId": "mem_2u",
+            "startsAt": "2026-10-14T10:00:00.000Z",
+            "endsAt": "2026-10-14T12:00:00.000Z",
+            "attendees": 5,
+            "status": "confirmed",
+            "notes": null,
+            "totalPrice": 6900,
+            "createdAt": "2026-10-06T10:00:00.000Z",
+            "roomName": "Aurora",
+            "locationId": "loc_1",
+            "locationName": "Riverside Hub",
+            "memberName": "Julia Stark"
+          },
+          {
+            "id": "bk_ll",
+            "roomId": "room_t",
+            "memberId": "mem_1p",
+            "startsAt": "2026-10-14T10:00:00.000Z",
+            "endsAt": "2026-10-14T11:00:00.000Z",
+            "attendees": 7,
+            "status": "confirmed",
+            "notes": null,
+            "totalPrice": 18200,
+            "createdAt": "2026-10-07T10:00:00.000Z",
+            "roomName": "Juniper",
+            "locationId": "loc_4",
+            "locationName": "Canal Yard",
+            "memberName": "Jammie Beahan"
+          },
+          {
+            "id": "bk_le",
+            "roomId": "room_m",
+            "memberId": "mem_25",
+            "startsAt": "2026-10-14T11:30:00.000Z",
+            "endsAt": "2026-10-14T13:30:00.000Z",
+            "attendees": 2,
+            "status": "pending",
+            "notes": null,
+            "totalPrice": 5400,
+            "createdAt": "2026-10-08T11:30:00.000Z",
+            "roomName": "Iris",
+            "locationId": "loc_3",
+            "locationName": "Old Mill Works",
+            "memberName": "Sasha Herzog"
+          },
+          {
+            "id": "bk_lc",
+            "roomId": "room_h",
+            "memberId": "mem_1q",
+            "startsAt": "2026-10-14T12:00:00.000Z",
+            "endsAt": "2026-10-14T15:00:00.000Z",
+            "attendees": 2,
+            "status": "confirmed",
+            "notes": null,
+            "totalPrice": 7950,
+            "createdAt": "2026-10-03T12:00:00.000Z",
+            "roomName": "Juniper",
+            "locationId": "loc_2",
+            "locationName": "Market Square Loft",
+            "memberName": "Liana Metz"
+          },
+          {
+            "id": "bk_l0",
+            "roomId": "room_6",
+            "memberId": "mem_1s",
+            "startsAt": "2026-10-14T13:00:00.000Z",
+            "endsAt": "2026-10-14T15:00:00.000Z",
+            "attendees": 6,
+            "status": "confirmed",
+            "notes": null,
+            "totalPrice": 1300,
+            "createdAt": "2026-10-04T13:00:00.000Z",
+            "roomName": "Granite",
+            "locationId": "loc_1",
+            "locationName": "Riverside Hub",
+            "memberName": "Marsha Bergnaum"
+          },
+          {
+            "id": "bk_l4",
+            "roomId": "room_a",
+            "memberId": "mem_1j",
+            "startsAt": "2026-10-14T14:00:00.000Z",
+            "endsAt": "2026-10-14T16:00:00.000Z",
+            "attendees": 1,
+            "status": "confirmed",
+            "notes": null,
+            "totalPrice": 3100,
+            "createdAt": "2026-10-02T14:00:00.000Z",
+            "roomName": "Lumen",
+            "locationId": "loc_1",
+            "locationName": "Riverside Hub",
+            "memberName": "Johathan Davis"
+          }
+        ]
+      }
+    },
+    {
+      "label": "dashboard of an invalid date",
+      "method": "GET",
+      "path": "/dashboard",
+      "query": {
+        "date": "2026-02-30"
+      },
+      "auth": "admin",
+      "status": 422,
+      "response": {
+        "message": "Validation failed",
+        "fieldErrors": {
+          "date": "Invalid ISO date"
+        }
+      }
+    },
+    {
+      "label": "bookings of the day",
+      "method": "GET",
+      "path": "/bookings",
+      "query": {
+        "from": "2026-11-10",
+        "to": "2026-11-10",
+        "limit": "5"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "bk_13e",
+            "roomId": "room_139",
+            "memberId": "mem_13b",
+            "startsAt": "2026-11-10T12:00:00.000Z",
+            "endsAt": "2026-11-10T13:30:00.000Z",
+            "attendees": 4,
+            "notes": "Touching the first",
+            "status": "cancelled",
+            "totalPrice": 3750,
+            "createdAt": "2026-10-14T09:00:00.000Z",
+            "roomName": "Onyx Large",
+            "locationId": "loc_138",
+            "locationName": "Scenario Hub North",
+            "memberName": "Dana Testova"
+          },
+          {
+            "id": "bk_13d",
+            "roomId": "room_139",
+            "memberId": "mem_13b",
+            "startsAt": "2026-11-10T08:00:00.000Z",
+            "endsAt": "2026-11-10T09:30:00.000Z",
+            "attendees": 4,
+            "notes": null,
+            "status": "completed",
+            "totalPrice": 3750,
+            "createdAt": "2026-10-14T09:00:00.000Z",
+            "roomName": "Onyx Large",
+            "locationId": "loc_138",
+            "locationName": "Scenario Hub North",
+            "memberName": "Dana Testova"
+          }
+        ],
+        "total": 2,
+        "page": 1,
+        "limit": 5
+      }
+    },
+    {
+      "label": "bookings by member name",
+      "method": "GET",
+      "path": "/bookings",
+      "query": {
+        "q": "dana",
+        "status": "cancelled"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "bk_13e",
+            "roomId": "room_139",
+            "memberId": "mem_13b",
+            "startsAt": "2026-11-10T12:00:00.000Z",
+            "endsAt": "2026-11-10T13:30:00.000Z",
+            "attendees": 4,
+            "notes": "Touching the first",
+            "status": "cancelled",
+            "totalPrice": 3750,
+            "createdAt": "2026-10-14T09:00:00.000Z",
+            "roomName": "Onyx Large",
+            "locationId": "loc_138",
+            "locationName": "Scenario Hub North",
+            "memberName": "Dana Testova"
+          }
+        ],
+        "total": 1,
+        "page": 1,
+        "limit": 20
+      }
+    },
+    {
+      "label": "bookings of the location",
+      "method": "GET",
+      "path": "/bookings",
+      "query": {
+        "locationId": "loc_138",
+        "limit": "5"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "bk_13e",
+            "roomId": "room_139",
+            "memberId": "mem_13b",
+            "startsAt": "2026-11-10T12:00:00.000Z",
+            "endsAt": "2026-11-10T13:30:00.000Z",
+            "attendees": 4,
+            "notes": "Touching the first",
+            "status": "cancelled",
+            "totalPrice": 3750,
+            "createdAt": "2026-10-14T09:00:00.000Z",
+            "roomName": "Onyx Large",
+            "locationId": "loc_138",
+            "locationName": "Scenario Hub North",
+            "memberName": "Dana Testova"
+          },
+          {
+            "id": "bk_13d",
+            "roomId": "room_139",
+            "memberId": "mem_13b",
+            "startsAt": "2026-11-10T08:00:00.000Z",
+            "endsAt": "2026-11-10T09:30:00.000Z",
+            "attendees": 4,
+            "notes": null,
+            "status": "completed",
+            "totalPrice": 3750,
+            "createdAt": "2026-10-14T09:00:00.000Z",
+            "roomName": "Onyx Large",
+            "locationId": "loc_138",
+            "locationName": "Scenario Hub North",
+            "memberName": "Dana Testova"
+          }
+        ],
+        "total": 2,
+        "page": 1,
+        "limit": 5
+      }
+    },
+    {
+      "label": "replace a location",
+      "method": "PUT",
+      "path": "/locations/loc_1",
+      "query": {},
+      "auth": "admin",
+      "status": 404,
+      "response": {
+        "message": "No route for PUT /locations/loc_1"
+      }
+    },
+    {
+      "label": "read the bulk path",
+      "method": "GET",
+      "path": "/bookings/bulk",
+      "query": {},
+      "auth": "admin",
+      "status": 404,
+      "response": {
+        "message": "Booking not found"
+      }
+    },
+    {
+      "label": "read an unknown route",
+      "method": "GET",
+      "path": "/locations/x/y",
+      "query": {},
+      "auth": "admin",
+      "status": 404,
+      "response": {
+        "message": "No route for GET /locations/x/y"
+      }
+    },
+    {
+      "label": "read with a trailing slash",
+      "method": "GET",
+      "path": "/locations/",
+      "query": {
+        "limit": "1"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "loc_4",
+            "name": "Canal Yard",
+            "city": "Berlin",
+            "address": "8 Ufer Str.",
+            "timezone": "Europe/Berlin",
+            "opensAt": "08:00",
+            "closesAt": "22:00",
+            "status": "active",
+            "roomCount": 6
+          }
+        ],
+        "total": 6,
+        "page": 1,
+        "limit": 1
+      }
+    },
+    {
+      "label": "unknown route without a token",
+      "method": "DELETE",
+      "path": "/bookings/bk_1",
+      "query": {},
+      "auth": "none",
+      "status": 404,
+      "response": {
+        "message": "No route for DELETE /bookings/bk_1"
+      }
+    },
+    {
+      "label": "reset",
+      "method": "POST",
+      "path": "/__reset",
+      "query": {},
+      "auth": "none",
+      "status": 204,
+      "response": null
+    },
+    {
+      "label": "read the created location after the reset",
+      "method": "GET",
+      "path": "/locations/loc_138",
+      "query": {},
+      "auth": "admin",
+      "status": 404,
+      "response": {
+        "message": "Location not found"
+      }
+    },
+    {
+      "label": "list the locations after the reset",
+      "method": "GET",
+      "path": "/locations",
+      "query": {
+        "limit": "2"
+      },
+      "auth": "admin",
+      "status": 200,
+      "response": {
+        "items": [
+          {
+            "id": "loc_4",
+            "name": "Canal Yard",
+            "city": "Berlin",
+            "address": "8 Ufer Str.",
+            "timezone": "Europe/Berlin",
+            "opensAt": "08:00",
+            "closesAt": "22:00",
+            "status": "active",
+            "roomCount": 6
+          },
+          {
+            "id": "loc_5",
+            "name": "Harbour Studio",
+            "city": "Lisbon",
+            "address": "27 Rua do Cais",
+            "timezone": "Europe/Lisbon",
+            "opensAt": "09:00",
+            "closesAt": "19:00",
+            "status": "inactive",
+            "roomCount": 7
+          }
+        ],
+        "total": 5,
+        "page": 1,
+        "limit": 2
+      }
+    },
+    {
+      "label": "sign in after the reset",
+      "method": "POST",
+      "path": "/auth/login",
+      "query": {},
+      "body": {
+        "email": "admin@coworking.test",
+        "password": "demo1234"
+      },
+      "auth": "none",
+      "status": 200,
+      "response": {
+        "token": "demo-token.usr_admin",
+        "user": {
+          "id": "usr_admin",
+          "name": "Alex Morgan",
+          "email": "admin@coworking.test",
+          "role": "admin"
+        }
+      }
+    }
+  ]
+}
