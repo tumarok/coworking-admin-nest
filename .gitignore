@@ -12,6 +12,9 @@ src/generated/
 .env.*
 !.env.example
 
+# machine-specific editor tool settings
+.claude/settings.local.json
+
 # editors and OS
 .idea/
 .vscode/*
