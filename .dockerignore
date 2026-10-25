@@ -1,0 +1,13 @@
+# Only what the Dockerfile copies is sent to the build.
+*
+!package.json
+!package-lock.json
+!prisma.config.ts
+!tsconfig.json
+!tsconfig.build.json
+!nest-cli.json
+!prisma
+!src
+
+# The client is generated inside the image.
+src/generated

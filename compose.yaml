@@ -1,3 +1,13 @@
+# The API and its database on one machine:
+#   docker compose up --build --wait         API on http://127.0.0.1:4010, docs on /docs
+#   docker compose --profile full up --build --wait
+#                                            plus the three frontends on :8081 (React),
+#                                            :8082 (Angular) and :8083 (Next.js)
+# Sign in with admin@coworking.test / demo1234. The defaults below are for a demo on one machine:
+# set JWT_SECRET, and ENABLE_RESET=false, for anything else.
+# Compose reads these from the shell or from a `.env` next to this file, which wins over the
+# defaults: JWT_SECRET, ENABLE_RESET, API_PORT (4010), DB_PORT (5433), GHCR_OWNER (tumarok) and
+# REACT_IMAGE, ANGULAR_IMAGE, NEXT_IMAGE.
 name: coworking-admin-nest
 
 services:
@@ -10,7 +20,8 @@ services:
       # ICU makes ORDER BY on names match the mock API's locale-aware sorting.
       POSTGRES_INITDB_ARGS: --locale-provider=icu --icu-locale=und
     ports:
-      - '127.0.0.1:5433:5432'
+      # Loopback only. 5433 because the host's own PostgreSQL usually holds 5432.
+      - '127.0.0.1:${DB_PORT:-5433}:5432'
     volumes:
       - db-data:/var/lib/postgresql
     healthcheck:
@@ -18,6 +29,76 @@ services:
       interval: 2s
       timeout: 3s
       retries: 30
+
+  migrate:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+      target: migrate
+    image: ghcr.io/${GHCR_OWNER:-tumarok}/coworking-admin-nest-migrate:latest
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/coworking
+      # Not used by the migration, but the environment is validated as a whole.
+      JWT_SECRET: ${JWT_SECRET:-demo-secret-for-one-machine-only-change-it}
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: ghcr.io/${GHCR_OWNER:-tumarok}/coworking-admin-nest:latest
+    init: true
+    environment:
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/coworking
+      JWT_SECRET: ${JWT_SECRET:-demo-secret-for-one-machine-only-change-it}
+      # The end-to-end tests of the frontends reset the data through this endpoint.
+      ENABLE_RESET: ${ENABLE_RESET:-true}
+    ports:
+      # Loopback only: the demo account is public and the reset endpoint is open.
+      - '127.0.0.1:${API_PORT:-4010}:4010'
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  react:
+    profiles: [full]
+    image: ${REACT_IMAGE:-ghcr.io/tumarok/coworking-admin:latest}
+    init: true
+    environment:
+      API_UPSTREAM: http://api:4010
+    ports:
+      - '127.0.0.1:8081:80'
+    depends_on:
+      api:
+        condition: service_healthy
+
+  angular:
+    profiles: [full]
+    image: ${ANGULAR_IMAGE:-ghcr.io/tumarok/coworking-admin-angular:latest}
+    init: true
+    environment:
+      API_UPSTREAM: http://api:4010
+    ports:
+      - '127.0.0.1:8082:8080'
+    depends_on:
+      api:
+        condition: service_healthy
+
+  next:
+    profiles: [full]
+    image: ${NEXT_IMAGE:-ghcr.io/tumarok/coworking-admin-next:latest}
+    init: true
+    environment:
+      API_URL: http://api:4010
+      # A browser drops a Secure cookie on plain HTTP. Remove this behind HTTPS.
+      COOKIE_SECURE: 'false'
+    ports:
+      - '127.0.0.1:8083:3000'
+    depends_on:
+      api:
+        condition: service_healthy
 
 volumes:
   db-data:
